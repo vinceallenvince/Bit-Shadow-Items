@@ -2,6 +2,8 @@
 
 # bitshadowitems
 
+This is a work in progres...
+
 Components for Bit-Shadow Machine simulations.
 
 ##Install
