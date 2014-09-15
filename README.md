@@ -2,7 +2,7 @@
 
 # bitshadowitems
 
-This is a work in progres...
+This is a work in progress...
 
 Components for Bit-Shadow Machine simulations.
 
