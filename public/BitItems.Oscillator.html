@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+  <title>Bit-Shadow Machine</title>
+  <link href="css/bitshadowmachine.min.css" type="text/css" charset="utf-8" rel="stylesheet" />
+  <script src="scripts/bitshadowmachine.min.js" type="text/javascript" charset="utf-8"></script>
+  <script src="scripts/bitshadowitems.min.js" type="text/javascript" charset="utf-8"></script>
+  </head>
+  <body>
+    <div id='worldA'></div>
+    <script type="text/javascript" charset="utf-8">
+
+      var rand = BitShadowMachine.Utils.getRandomNumber;
+
+      BitShadowMachine.System.Classes = {
+        Oscillator: BitShadowItems.Oscillator
+      };
+
+      BitShadowMachine.System.setup(function() {
+
+        var world = this.add('World', {
+          width: 960,
+          height: 540,
+          resolution: 4,
+          el: document.getElementById('worldA'),
+          color: [0, 0, 0],
+          gravity: new BitShadowMachine.Vector(0, 0.1),
+          c: 0.1
+        });
+
+        this.add('Oscillator', {
+          acceleration: new BitShadowMachine.Vector(0.01, 0.01)
+        });
+      });
+      BitShadowMachine.System.loop();
+
+    </script>
+  </body>
+</html>
