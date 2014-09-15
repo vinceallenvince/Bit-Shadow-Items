@@ -5,4 +5,30 @@ before_install:
 - export DISPLAY=:99.0
 - sh -e /etc/init.d/xvfb start
 - npm install -g grunt-cli
-
+after_success: grunt release
+before_deploy: echo 'ready to deploy?'
+after_deploy:
+- echo 'done!'
+- ./deploy-gh-pages.sh
+deploy:
+- provider: releases
+  api_key:
+    secure: HUgBgVZssmOUo8Y919ORj834PRzO2nvsm4f3YRziAEiBB5Z0MfT2OtbHT0Ndfo6K5fYA0ch1DIWAPSGHA4pirNwNT0msirevXK27CJRf0PrxpxloMlhEYZCYJo8YN0060dxRWtu7s8AV/Iiuq52b89Sz6Kcemb1LTuC1MdgOG8M=
+  file:
+  - release/bitshadowitems.min.js
+  - release/bitshadowitems.min.css
+  on:
+    repo: vinceallenvince/Bit-Shadow-Items
+    tags: true
+    all_branches: true
+- provider: npm
+  email: vince@vinceallen.com
+  api_key:
+    secure: Bd2jyHhp/Ew3M6x4xEFtE+b4EjtJHKxNF7xqgkbisUQ/57XHYcgLe8ClQOKgM04UzUjdFgXwPwYcv4bwE2LehNOL6pqEawYq6Tv5D7CfGhh0DDJldVvPpMC1FZAXEoQqBmVrocu+NMZGt0Y/IqpGNmrEvNaC54lFtPPY/FRS4gQ=
+  on:
+    repo: vinceallenvince/Bit-Shadow-Items
+    tags: true
+    all_branches: true
+env:
+  global:
+    secure: B7bSQy+cnBUaljgG1LcetAuUnMjx68ulm6nfstxvlTDXjpbl1NsIV1swqZLiZA9MjLOPa32jM+hKELXyLGeyI/TK6gCw1q9ghSmQO2FQ6kaMCyVl8AsxQ5yXVKSiJo3zfdQ7vR41+/REaPKTDi3I3SjIBaFmHKI/83d/7ouGfMc=
