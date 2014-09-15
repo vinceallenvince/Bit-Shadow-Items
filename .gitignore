@@ -4,6 +4,8 @@ reports
 doc
 release
 out
+src_bak
+test_bak
 
 #### FILES ####
 *.log
