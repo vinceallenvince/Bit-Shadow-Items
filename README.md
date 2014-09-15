@@ -1,4 +1,4 @@
-![Build status](https://travis-ci.org/vinceallenvince/bitshadowitems.svg?branch=master)
+![Build status](https://travis-ci.org/vinceallenvince/Bit-Shadow-Items.svg?branch=master)
 
 # bitshadowitems
 
