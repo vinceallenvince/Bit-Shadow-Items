@@ -9,8 +9,8 @@ echo "starting deploy..."
  cp -r ../public/* ./
  cp -r ../doc/ ./doc
  cp -r ../reports ./reports
- cp ../release/flora.min.js ./scripts/flora.min.js
- cp ../release/flora.min.css ./css/flora.min.css
+ cp ../release/bitshadowitems.min.js ./scripts/bitshadowitems.min.js
+ cp ../release/bitshadowitems.min.css ./css/bitshadowitems.min.css
  git add .
  git commit -m "Deployed to Github Pages"
  git push --force --quiet "https://${GH_TOKEN}@${GH_REF}" master:gh-pages > /dev/null 2>&1
