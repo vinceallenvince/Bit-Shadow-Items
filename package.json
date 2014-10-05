@@ -33,8 +33,10 @@
     "testling": "^1.6.1"
   },
   "dependencies": {
-    "burner": "^3.1.5",
     "bitshadowmachine": "^3.0.2",
+    "borderpalette": "^0.1.7",
+    "burner": "^3.1.5",
+    "colorpalette": "^0.1.5",
     "quietriot": "^0.1.2"
   }
 }

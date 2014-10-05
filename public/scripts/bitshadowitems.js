@@ -317,7 +317,7 @@ Anim.prototype.advanceFrame = function() {
 module.exports = Anim;
 
 
-},{"./item":4,"./system":6,"burner":12}],3:[function(require,module,exports){
+},{"./item":4,"./system":6,"burner":14}],3:[function(require,module,exports){
 var Item = require('./item');
 var System = require('./system');
 var Utils = require('burner').Utils;
@@ -366,7 +366,7 @@ AnimUnit.prototype.step = function() {
 };
 
 module.exports = AnimUnit;
-},{"./item":4,"./system":6,"burner":12}],4:[function(require,module,exports){
+},{"./item":4,"./system":6,"burner":14}],4:[function(require,module,exports){
 /*global document */
 var Vector = require('burner').Vector;
 
@@ -602,7 +602,7 @@ Item.prototype._wrapWorldEdges = function() {
 
 module.exports = Item;
 
-},{"burner":12}],5:[function(require,module,exports){
+},{"burner":14}],5:[function(require,module,exports){
 var BitShadowMachine = {
   Anim: require('./anim'),
   Item: require('./item'),
@@ -618,7 +618,7 @@ BitShadowMachine.System.Classes = {
 };
 
 module.exports = BitShadowMachine;
-},{"./anim":2,"./animunit":3,"./item":4,"./system":6,"burner":12,"quietriot":15}],6:[function(require,module,exports){
+},{"./anim":2,"./animunit":3,"./item":4,"./system":6,"burner":14,"quietriot":19}],6:[function(require,module,exports){
 /*global window, document */
 /*jshint supernew:true */
 
@@ -1349,7 +1349,7 @@ System._resetSystem = function() {
 
 module.exports = System;
 
-},{"./item":4,"./world":7,"burner":12,"fpsdisplay":1}],7:[function(require,module,exports){
+},{"./item":4,"./world":7,"burner":14,"fpsdisplay":1}],7:[function(require,module,exports){
 var Item = require('./item');
 var Utils = require('burner').Utils;
 var Vector = require('burner').Vector;
@@ -1437,7 +1437,7 @@ World.prototype.step = function() {};
 
 module.exports = World;
 
-},{"./item":4,"burner":12}],8:[function(require,module,exports){
+},{"./item":4,"burner":14}],8:[function(require,module,exports){
 /*jshint supernew:true */
 /** @namespace */
 var Utils = {
@@ -1638,8 +1638,81 @@ Utils.capitalizeFirstLetter = function(string) {
 
 module.exports = Utils;
 },{}],9:[function(require,module,exports){
+var Utils = require('drawing-utils-lib');
+
+/**
+ * Creates a new BorderPalette object.
+ *
+ * Use this class to create a palette of border styles.
+ *
+ * @param {string|number} [opt_id=] An optional id. If an id is not passed, a default id is created.
+ * @constructor
+ */
+function BorderPalette(opt_id) {
+
+  /**
+   * Holds a list of border styles.
+   * @private
+   */
+  this._borders = [];
+
+  this.id = opt_id || BorderPalette._idCount;
+  BorderPalette._idCount++; // increment id
+}
+
+/**
+ * Increments as each BorderPalette is created.
+ * @type number
+ * @default 0
+ * @private
+ */
+BorderPalette._idCount = 0;
+
+BorderPalette.prototype.name = 'BorderPalette';
+
+/**
+ * Adds a random number of the passed border style to the 'borders' array.
+ *
+ * @param {Object} options A set of required options
+ *    that includes:
+ *    options.min {number} The minimum number of styles to add.
+ *    options.max {number} The maximum number of styles to add.
+ *    options.style {string} The border style.
+ */
+BorderPalette.prototype.addBorder = function(options) {
+
+  if (!options.min || !options.max || !options.style) {
+    throw new Error('BorderPalette.addBorder requires min, max and style paramaters.');
+  }
+
+  for (var i = 0, ln = Utils.getRandomNumber(options.min, options.max); i < ln; i++) {
+    this._borders.push(options.style);
+  }
+
+  return this;
+};
+
+/**
+ * @returns A style randomly selected from the 'borders' property.
+ * @throws {Error} If the 'borders' property is empty.
+ */
+BorderPalette.prototype.getBorder = function() {
+
+  if (this._borders.length > 0) {
+    return this._borders[Utils.getRandomNumber(0, this._borders.length - 1)];
+  }
+
+  throw new Error('BorderPalette.getBorder: You must add borders via addBorder() before using getBorder().');
+};
+
+module.exports = BorderPalette;
+
+
+},{"drawing-utils-lib":8}],10:[function(require,module,exports){
+module.exports=require(8)
+},{"/Users/vince/Dev/Foldi/Bit-Shadow-Items/node_modules/borderpalette/node_modules/drawing-utils-lib/src/drawing-utils-lib.js":8}],11:[function(require,module,exports){
 module.exports=require(1)
-},{"/Users/vince/Dev/Foldi/Bit-Shadow-Items/node_modules/bitshadowmachine/node_modules/fpsdisplay/src/fpsdisplay.js":1}],10:[function(require,module,exports){
+},{"/Users/vince/Dev/Foldi/Bit-Shadow-Items/node_modules/bitshadowmachine/node_modules/fpsdisplay/src/fpsdisplay.js":1}],12:[function(require,module,exports){
 /*global exports, Vector */
 /*jshint supernew:true */
 
@@ -1894,7 +1967,7 @@ Vector.prototype.dot = function(vector) {
 };
 
 module.exports = Vector;
-},{}],11:[function(require,module,exports){
+},{}],13:[function(require,module,exports){
 /*global document */
 
 var Vector = require('vector2d-lib');
@@ -2261,7 +2334,7 @@ Item.prototype.getCSSText = function(props) {
 
 module.exports = Item;
 
-},{"vector2d-lib":10}],12:[function(require,module,exports){
+},{"vector2d-lib":12}],14:[function(require,module,exports){
 module.exports = {
   Item: require('./item'),
   System: require('./system'),
@@ -2270,7 +2343,7 @@ module.exports = {
   World: require('./world')
 };
 
-},{"./item":11,"./system":13,"./world":14,"drawing-utils-lib":8,"vector2d-lib":10}],13:[function(require,module,exports){
+},{"./item":13,"./system":15,"./world":16,"drawing-utils-lib":10,"vector2d-lib":12}],15:[function(require,module,exports){
 /*global window, document */
 /*jshint supernew:true */
 
@@ -2768,7 +2841,7 @@ System._toggleFPS = function() {
 
 module.exports = System;
 
-},{"./item":11,"./world":14,"drawing-utils-lib":8,"fpsdisplay":9,"vector2d-lib":10}],14:[function(require,module,exports){
+},{"./item":13,"./world":16,"drawing-utils-lib":10,"fpsdisplay":11,"vector2d-lib":12}],16:[function(require,module,exports){
 var Vector = require('vector2d-lib'),
     Item = require('./item'),
     Utils = require('drawing-utils-lib');
@@ -2884,7 +2957,173 @@ World.prototype.getCSSText = function(props) {
 
 module.exports = World;
 
-},{"./item":11,"drawing-utils-lib":8,"vector2d-lib":10}],15:[function(require,module,exports){
+},{"./item":13,"drawing-utils-lib":10,"vector2d-lib":12}],17:[function(require,module,exports){
+module.exports=require(8)
+},{"/Users/vince/Dev/Foldi/Bit-Shadow-Items/node_modules/borderpalette/node_modules/drawing-utils-lib/src/drawing-utils-lib.js":8}],18:[function(require,module,exports){
+var Utils = require('drawing-utils-lib');
+/**
+ * Creates a new ColorPalette object.
+ *
+ * Use this class to create a palette of colors randomly selected
+ * from a range created with initial start and end colors. You
+ * can also generate gradients that smoothly interpolate from
+ * start and end colors.
+ *
+ * @param {string|number} [opt_id=] An optional id. If an id is not passed, a default id is created.
+ * @constructor
+ */
+function ColorPalette(opt_id) {
+
+  /**
+   * Holds a list of arrays representing 3-digit color values
+   * smoothly interpolated between start and end colors.
+   * @private
+   */
+  this._gradients = [];
+
+  /**
+   * Holds a list of arrays representing 3-digit color values
+   * randomly selected from start and end colors.
+   * @private
+   */
+  this._colors = [];
+
+  this.id = opt_id || ColorPalette._idCount;
+  ColorPalette._idCount++; // increment id
+}
+
+/**
+ * Increments as each ColorPalette is created.
+ * @type number
+ * @default 0
+ * @private
+ */
+ColorPalette._idCount = 0;
+
+ColorPalette.prototype.name = 'ColorPalette';
+
+/**
+ * Creates a color range of 255 colors from the passed start and end colors.
+ * Adds a random selection of these colors to the color property of
+ * the color palette.
+ *
+ * @param {Object} options A set of required options
+ *    that includes:
+ *    options.min {number} The minimum number of colors to add.
+ *    options.max {number} The maximum number of color to add.
+ *    options.startColor {Array} The beginning color of the color range.
+ *    options.endColor {Array} The end color of the color range.
+ */
+ColorPalette.prototype.addColor = function(options) {
+
+  if (!options.min || !options.max || !options.startColor || !options.endColor) {
+    throw new Error('ColorPalette.addColor must pass min, max, startColor and endColor options.');
+  }
+
+  var i, ln, colors;
+
+  ln = Utils.getRandomNumber(options.min, options.max);
+  colors = ColorPalette._createColorRange(options.startColor, options.endColor, 255);
+
+  for (i = 0; i < ln; i++) {
+    this._colors.push(colors[Utils.getRandomNumber(0, colors.length - 1)]);
+  }
+
+  return this;
+};
+
+/**
+ * Creates an array of RGB color values interpolated between
+ * a passed startColor and endColor.
+ *
+ * @param {Array} startColor The beginning of the color array.
+ * @param {Array} startColor The end of the color array.
+ * @param {number} totalColors The total numnber of colors to create.
+ * @returns {Array} An array of color values.
+ */
+ColorPalette._createColorRange = function(startColor, endColor, totalColors) {
+
+  var i, colors = [],
+      startRed = startColor[0],
+      startGreen = startColor[1],
+      startBlue = startColor[2],
+      endRed = endColor[0],
+      endGreen = endColor[1],
+      endBlue = endColor[2],
+      diffRed, diffGreen, diffBlue,
+      newRed, newGreen, newBlue;
+
+  diffRed = endRed - startRed;
+  diffGreen = endGreen - startGreen;
+  diffBlue = endBlue - startBlue;
+
+  for (i = 0; i < totalColors; i++) {
+    newRed = parseInt(diffRed * i/totalColors, 10) + startRed;
+    newGreen = parseInt(diffGreen * i/totalColors, 10) + startGreen;
+    newBlue = parseInt(diffBlue * i/totalColors, 10) + startBlue;
+    colors.push([newRed, newGreen, newBlue]);
+  }
+  return colors;
+};
+
+/**
+ * @returns An array representing a randomly selected color
+ *    from the colors property.
+ * @throws {Error} If the colors property is empty.
+ */
+ColorPalette.prototype.getColor = function() {
+
+  if (this._colors.length > 0) {
+    return this._colors[Utils.getRandomNumber(0, this._colors.length - 1)];
+  } else {
+    throw new Error('ColorPalette.getColor: You must add colors via addColor() before using getColor().');
+  }
+};
+
+// TODO: add the following
+
+/**
+ * Adds color arrays representing a color range to the gradients property.
+ *
+ * @param {Object} options A set of required options
+ *    that includes:
+ *    options.startColor {Array} The beginning color of the color range.
+ *    options.endColor {Array} The end color of the color range.
+ *    options.totalColors {number} The total number of colors in the gradient.
+ * @private
+ */
+/*ColorPalette.prototype.createGradient = function(options) {
+
+  if (!options.startColor || !options.endColor || !options.totalColors) {
+    throw new Error('ColorPalette.addColor must pass startColor, endColor and totalColors options.');
+  }
+  this.startColor = options.startColor;
+  this.endColor = options.endColor;
+  this.totalColors = options.totalColors || 255;
+  this._gradients.push(ColorPalette._createColorRange(this.startColor, this.endColor, this.totalColors));
+};*/
+
+/**
+ * Renders a strip of colors representing the color range
+ * in the colors property.
+ *
+ * @param {Object} parent A DOM object to contain the color strip.
+ */
+/*ColorPalette.prototype.createSampleStrip = function(parent) {
+
+  var i, max, div;
+
+  for (i = 0, max = this._colors.length; i < max; i++) {
+    div = document.createElement('div');
+    div.className = 'color-sample-strip';
+    div.style.background = 'rgb(' + this._colors[i].toString() + ')';
+    parent.appendChild(div);
+  }
+};*/
+
+module.exports = ColorPalette;
+
+},{"drawing-utils-lib":17}],19:[function(require,module,exports){
 /*jshint bitwise:false */
 /**
 * https://gist.github.com/304522
@@ -3015,7 +3254,7 @@ SimplexNoise.dot = function(g, x, y) {
 
 module.exports = SimplexNoise;
 
-},{}],16:[function(require,module,exports){
+},{}],20:[function(require,module,exports){
 var Item = require('bitshadowmachine').Item,
 		Mover = require('./mover'),
     System = require('bitshadowmachine').System,
@@ -3382,7 +3621,69 @@ Agent.prototype._cohesion = function(items) {
 
 
 module.exports = Agent;
-},{"./mover":18,"bitshadowmachine":5}],17:[function(require,module,exports){
+},{"./mover":23,"bitshadowmachine":5}],21:[function(require,module,exports){
+/**
+ * @namespace
+ */
+var config = {
+  borderStyles: [
+    'none',
+    'solid',
+    'dotted',
+    'dashed',
+    'double',
+    'inset',
+    'outset',
+    'groove',
+    'ridge'
+  ],
+  defaultColorList: [
+    {
+      name: 'cold',
+      startColor: [88, 129, 135],
+      endColor: [171, 244, 255],
+      boxShadowColor: [132, 192, 201]
+    },
+    {
+      name: 'food',
+      startColor: [186, 255, 130],
+      endColor: [84, 187, 0],
+      boxShadowColor: [57, 128, 0]
+    },
+    {
+      name: 'heat',
+      startColor: [255, 132, 86],
+      endColor: [175, 47, 0],
+      boxShadowColor: [255, 69, 0]
+    },
+    {
+      name: 'light',
+      startColor: [255, 255, 255],
+      endColor: [189, 148, 0],
+      boxShadowColor: [255, 200, 0]
+    },
+    {
+      name: 'oxygen',
+      startColor: [130, 136, 255],
+      endColor: [49, 56, 205],
+      boxShadowColor: [60, 64, 140]
+    }
+  ],
+  keyMap: {
+    pause: 80,
+    resetSystem: 82,
+    stats: 83
+  },
+  touchMap: {
+    stats: 2,
+    pause: 3,
+    reset: 4
+  }
+};
+
+module.exports.config = config;
+
+},{}],22:[function(require,module,exports){
 var Utils = require('bitshadowmachine').Utils;
 
 var BitShadowItems = {
@@ -3390,6 +3691,8 @@ var BitShadowItems = {
   Mover: require('./mover'),
   Oscillator: require('./oscillator'),
   Particle: require('./particle'),
+  Sensor: require('./sensor'),
+  Stimulus: require('./stimulus'),
   Walker: require('./walker'),
   configure: function(System) {
   	var sys = require('bitshadowmachine').System;
@@ -3404,22 +3707,19 @@ var BitShadowItems = {
 };
 
 // TODO: add...
-//Agent: require('./agent'),
+
 //Attractor: require('./attractor'),
 //Connector: require('./connector'),
 //Dragger: require('./dragger'),
 //FlowField: require('./flowfield'),
 //ParticleSystem: require('./particlesystem'),
 //Point: require('./point'),
-//RangeDisplay: require('./rangedisplay'),
 //Repeller: require('./repeller'),
-//Sensor: require('./sensor'),
-//Stimulus: require('./stimulus'),
-//Walker: require('./walker')
+
 
 module.exports = BitShadowItems;
 
-},{"./agent":16,"./mover":18,"./oscillator":19,"./particle":20,"./walker":21,"bitshadowmachine":5}],18:[function(require,module,exports){
+},{"./agent":20,"./mover":23,"./oscillator":24,"./particle":25,"./sensor":26,"./stimulus":27,"./walker":28,"bitshadowmachine":5}],23:[function(require,module,exports){
 var Item = require('bitshadowmachine').Item,
     System = require('bitshadowmachine').System,
     Utils = require('bitshadowmachine').Utils,
@@ -3589,7 +3889,7 @@ Mover.prototype.step = function() {
 
 module.exports = Mover;
 
-},{"bitshadowmachine":5}],19:[function(require,module,exports){
+},{"bitshadowmachine":5}],24:[function(require,module,exports){
 var Item = require('bitshadowmachine').Item,
     SimplexNoise = require('quietriot'),
     System = require('bitshadowmachine').System,
@@ -3676,7 +3976,7 @@ Oscillator.prototype.step = function () {
 
 module.exports = Oscillator;
 
-},{"bitshadowmachine":5,"quietriot":15}],20:[function(require,module,exports){
+},{"bitshadowmachine":5,"quietriot":19}],25:[function(require,module,exports){
 var Item = require('bitshadowmachine').Item,
     Mover = require('./mover'),
     Utils = require('bitshadowmachine').Utils,
@@ -3746,11 +4046,621 @@ Particle.prototype.afterStep = function() {
 
 module.exports = Particle;
 
-},{"./mover":18,"bitshadowmachine":5}],21:[function(require,module,exports){
+},{"./mover":23,"bitshadowmachine":5}],26:[function(require,module,exports){
+var Mover = require('./mover'),
+    System = require('bitshadowmachine').System,
+    Utils = require('bitshadowmachine').Utils,
+    Vector = require('bitshadowmachine').Vector;
+
+/**
+ * Creates a new Sensor object.
+ *
+ * @constructor
+ * @extends Mover
+ *
+ * @param {Object} [opt_options=] A map of initial properties.
+ */
+function Sensor(opt_options) {
+  Mover.call(this);
+}
+Utils.extend(Sensor, Mover);
+
+/**
+ * Initializes Sensor.
+ * @param  {Object} world An instance of World.
+ * @param  {Object} [opt_options=] A map of initial properties.
+ * @param {string} [opt_options.type = ''] The type of stimulus that can activate this sensor. eg. 'cold', 'heat', 'light', 'oxygen', 'food', 'predator'
+ * @param {string} [opt_options.targetClass = 'Stimulus'] The class of Item that can activate this sensor. eg. 'Stimulus', 'Agent', 'Sheep', 'Wolf'
+ * @param {string} [opt_options.behavior = ''] The vehicle carrying the sensor will invoke this behavior when the sensor is activated.
+ * @param {number} [opt_options.sensitivity = 200] The higher the sensitivity, the farther away the sensor will activate when approaching a stimulus.
+ * @param {number} [opt_options.width = 7] Width.
+ * @param {number} [opt_options.height = 7] Height.
+ * @param {number} [opt_options.offsetDistance = 30] The distance from the center of the sensor's parent.
+ * @param {number} [opt_options.offsetAngle = 0] The angle of rotation around the vehicle carrying the sensor.
+ * @param {number} [opt_options.opacity = 0.75] Opacity.
+ * @param {Object} [opt_options.target = null] A stimulator.
+ * @param {boolean} [opt_options.activated = false] True if sensor is close enough to detect a stimulator.
+ * @param {Array} [opt_options.activatedColor = [255, 255, 255]] The color the sensor will display when activated.
+ * @param {number} [opt_options.borderRadius = 100] Border radius.
+ * @param {number} [opt_options.borderWidth = 2] Border width.
+ * @param {string} [opt_options.borderStyle = 'solid'] Border style.
+ * @param {Array} [opt_options.borderColor = [255, 255, 255]] Border color.
+ * @param {Function} [opt_options.onConsume = null] If sensor.behavior == 'CONSUME', sensor calls this function when consumption is complete.
+ * @param {Function} [opt_options.onDestroy = null] If sensor.behavior == 'DESTROY', sensor calls this function when target is destroyed.
+ */
+Sensor.prototype.init = function(world, opt_options) {
+  Sensor._superClass.init.call(this, world, opt_options);
+
+  var options = opt_options || {};
+
+  this.type = options.type || '';
+  this.targetClass = options.targetClass || 'Stimulus';
+  this.behavior = options.behavior || function() {};
+  this.sensitivity = typeof options.sensitivity !== 'undefined' ? options.sensitivity : 40;
+  //this.width = typeof options.width !== 'undefined' ? options.width : 7;
+  //this.height = typeof options.height !== 'undefined' ? options.height : 7;
+  this.offsetDistance = typeof options.offsetDistance !== 'undefined' ? options.offsetDistance : 15;
+  this.offsetAngle = options.offsetAngle || 0;
+  this.opacity = typeof options.opacity !== 'undefined' ? options.opacity : 0.75;
+  this.target = options.target || null;
+  this.activated = !!options.activated;
+  this.activatedColor = options.activatedColor || [255, 255, 255];
+  //this.borderRadius = typeof options.borderRadius !== 'undefined' ? options.borderRadius : 100;
+  //this.borderWidth = typeof options.borderWidth !== 'undefined' ? options.borderWidth : 2;
+  //this.borderStyle = options.borderStyle || 'solid';
+  //this.borderColor = options.borderColor || [255, 255, 255];
+  this.onConsume = options.onConsume || null;
+  this.onDestroy = options.onDestroy || null;
+  /*this.rangeDisplayBorderStyle = options.rangeDisplayBorderStyle || false;
+  this.rangeDisplayBorderDefaultColor = options.rangeDisplayBorderDefaultColor || false;
+  this.parent = options.parent || null;
+  this.displayRange = !!options.displayRange;
+  if (this.displayRange) {
+    this.rangeDisplay = System.add('RangeDisplay', {
+      sensor: this,
+      rangeDisplayBorderStyle: this.rangeDisplayBorderStyle,
+      rangeDisplayBorderDefaultColor: this.rangeDisplayBorderDefaultColor
+    });
+  }
+  this.displayConnector = !!options.displayConnector;*/
+
+  this.activationLocation = new Vector();
+  this._force = new Vector(); // used as a cache Vector
+  this.visibility = 'hidden';
+};
+
+/**
+ * Called every frame, step() updates the instance's properties.
+ */
+Sensor.prototype.step = function() {
+
+  this.visibility = 'visible';
+
+  if (this.parent) { // parenting
+
+    if (this.offsetDistance) {
+
+      r = this.offsetDistance; // use angle to calculate x, y
+      theta = Utils.degreesToRadians(this.parent.angle + this.offsetAngle);
+      x = r * Math.cos(theta);
+      y = r * Math.sin(theta);
+
+      this.location.x = this.parent.location.x;
+      this.location.y = this.parent.location.y;
+      this.location.add(new Vector(x, y)); // position the child
+
+      if (this.pointToParentDirection) {
+        this.angle = Utils.radiansToDegrees(Math.atan2(this.parent.velocity.y, this.parent.velocity.x));
+      }
+    } else {
+      this.location.x = this.parent.location.x;
+      this.location.y = this.parent.location.y;
+    }
+  }
+
+  var check = false;
+
+  /**
+   * Check if any Stimulus objects exist that match this sensor. If so,
+   * loop thru the list and check if sensor should activate.
+   */
+
+  var list = System.getAllItemsByAttribute('type', this.type, this.targetClass || 'Stimulus');
+
+  for (var i = 0, max = list.length; i < max; i++) {
+
+    if (this._sensorActive(list[i], this.sensitivity)) {
+
+      this.target = list[i]; // target this stimulator
+      if (!this.activationLocation.x && !this.activationLocation.y) {
+        this.activationLocation.x = this.parent.location.x;
+        this.activationLocation.y = this.parent.location.y;
+      }
+      this.activated = true; // set activation
+      this.activatedColor = this.target.color;
+
+      if (this.displayConnector && !this.connector) {
+        this.connector = System.add('Connector', {
+          parentA: this,
+          parentB: this.target
+        });
+      }
+
+      if (this.displayConnector && this.connector && this.connector.parentB !== this.target) {
+        this.connector.parentA = this;
+        this.connector.parentB = this.target;
+      }
+
+      check = true;
+    }
+  }
+
+
+  if (!check) {
+    this.target = null;
+    this.activated = false;
+    this.state = null;
+    this.color = [255, 255, 255];
+    this.activationLocation.x = null;
+    this.activationLocation.y = null;
+    if (this.connector) {
+      System.remove(this.connector);
+      this.connector = null;
+    }
+  } else {
+    this.color = this.activatedColor;
+  }
+
+  this.afterStep.call(this);
+};
+
+
+
+Sensor.prototype.getBehavior = function() {
+
+  var i, iMax, j, jMax;
+
+  switch (this.behavior) {
+
+    case 'CONSUME':
+      return function(sensor, target) {
+
+        /**
+         * CONSUME
+         * If inside the target, target shrinks.
+         */
+         if (Utils.isInside(sensor.parent, target)) {
+
+            if (target.scale > 2) {
+              target.scale *= 0.95;
+              if (!sensor.parent[target.type + 'Level']) {
+                sensor.parent[target.type + 'Level'] = 0;
+              }
+              sensor.parent[target.type + 'Level'] += 1;
+            } else {
+              if (sensor.onConsume && !target.consumed) {
+                target.consumed = true;
+                sensor.onConsume.call(this, sensor, target);
+              }
+              System.remove(target);
+              return;
+            }
+            if (target.height > 1) {
+              target.height *= 0.95;
+            }
+            if (target.borderWidth > 0) {
+              target.borderWidth *= 0.95;
+            }
+            if (target.boxShadowSpread > 0) {
+              target.boxShadowSpread *= 0.95;
+            }
+         }
+      };
+
+    case 'DESTROY':
+      return function(sensor, target) {
+
+        /**
+         * DESTROY
+         * If inside the target, ssytem destroys target.
+         */
+         if (Utils.isInside(sensor.parent, target)) {
+
+            System.add('ParticleSystem', {
+              location: new Vector(target.location.x, target.location.y),
+              lifespan: 20,
+              borderColor: target.borderColor,
+              startColor: target.color,
+              endColor: target.color
+            });
+            System.remove(target);
+
+            if (sensor.onDestroy) {
+              sensor.onDestroy.call(this, sensor, target);
+            }
+         }
+      };
+
+    case 'LIKES':
+      return function(sensor, target) {
+
+        /**
+         * LIKES
+         * Steer toward target at max speed.
+         */
+
+        // desiredVelocity = difference in target location and agent location
+        var desiredVelocity = Vector.VectorSub(target.location, this.location);
+
+        // limit to the maxSteeringForce
+        desiredVelocity.limit(this.maxSteeringForce);
+
+        return desiredVelocity;
+      };
+
+    case 'COWARD':
+      return function(sensor, target) {
+
+        /**
+         * COWARD
+         * Steer away from target at max speed.
+         */
+
+        // desiredVelocity = difference in target location and agent location
+        var desiredVelocity = Vector.VectorSub(target.location, this.location);
+
+        // reverse the force
+        desiredVelocity.mult(-0.075);
+
+        // limit to the maxSteeringForce
+        desiredVelocity.limit(this.maxSteeringForce);
+
+        return desiredVelocity;
+      };
+
+    case 'AGGRESSIVE':
+      return function(sensor, target) {
+
+        /**
+         * AGGRESSIVE
+         * Steer and arrive at target. Aggressive agents will hit their target.
+         */
+
+        // velocity = difference in location
+        var desiredVelocity = Vector.VectorSub(target.location, this.location);
+
+        // get distance to target
+        var distanceToTarget = desiredVelocity.mag();
+
+        if (distanceToTarget < this.scale * 2) {
+
+          // normalize desiredVelocity so we can adjust. ie: magnitude = 1
+          desiredVelocity.normalize();
+
+          // as agent gets closer, velocity decreases
+          var m = distanceToTarget / this.maxSpeed;
+
+          // extend desiredVelocity vector
+          desiredVelocity.mult(m);
+
+        }
+
+        // subtract current velocity from desired to create a steering force
+        desiredVelocity.sub(this.velocity);
+
+        // limit to the maxSteeringForce
+        desiredVelocity.limit(this.maxSteeringForce);
+
+        return desiredVelocity;
+
+      };
+
+    case 'CURIOUS':
+      return function(sensor, target) {
+
+        /**
+         * CURIOUS
+         * Steer and arrive at midpoint bw target location and agent location.
+         * After arriving, reverse direction and accelerate to max speed.
+         */
+
+        var desiredVelocity, distanceToTarget;
+
+        if (sensor.state !== 'running') {
+
+          var midpoint = sensor.activationLocation.midpoint(target.location);
+
+          // velocity = difference in location
+          desiredVelocity = Vector.VectorSub(midpoint, this.location);
+
+          // get distance to target
+          distanceToTarget = desiredVelocity.mag();
+
+          // normalize desiredVelocity so we can adjust. ie: magnitude = 1
+          desiredVelocity.normalize();
+
+          // as agent gets closer, velocity decreases
+          var m = distanceToTarget / this.maxSpeed;
+
+          // extend desiredVelocity vector
+          desiredVelocity.mult(m);
+
+          // subtract current velocity from desired to create a steering force
+          desiredVelocity.sub(this.velocity);
+
+          if (m < 0.5) {
+            sensor.state = 'running';
+          }
+        } else {
+
+          // note: desired velocity when running is the difference bw target and this agent
+          desiredVelocity = Vector.VectorSub(target.location, this.location);
+
+          // reverse the force
+          desiredVelocity.mult(-1);
+
+        }
+
+        // limit to the maxSteeringForce
+        desiredVelocity.limit(this.maxSteeringForce);
+
+        return desiredVelocity;
+      };
+
+    case 'EXPLORER':
+      return function(sensor, target) {
+
+        /**
+         * EXPLORER
+         * Gets close to target but does not change velocity.
+         */
+
+        // velocity = difference in location
+        var desiredVelocity = Vector.VectorSub(target.location, this.location);
+
+        // get distance to target
+        var distanceToTarget = desiredVelocity.mag();
+
+        // normalize desiredVelocity so we can adjust. ie: magnitude = 1
+        desiredVelocity.normalize();
+
+        // as agent gets closer, velocity decreases
+        var m = distanceToTarget / this.maxSpeed;
+
+        // extend desiredVelocity vector
+        desiredVelocity.mult(-m);
+
+        // subtract current velocity from desired to create a steering force
+        desiredVelocity.sub(this.velocity);
+
+        // limit to the maxSteeringForce
+        desiredVelocity.limit(this.maxSteeringForce * 0.05);
+
+        // add motor speed
+        this.motorDir.x = this.velocity.x;
+        this.motorDir.y = this.velocity.y;
+        this.motorDir.normalize();
+        if (this.velocity.mag() > this.motorSpeed) { // decelerate to defaultSpeed
+          this.motorDir.mult(-this.motorSpeed);
+        } else {
+          this.motorDir.mult(this.motorSpeed);
+        }
+
+        desiredVelocity.add(this.motorDir);
+
+        return desiredVelocity;
+
+      };
+
+    case 'LOVES':
+      return function(sensor, target) {
+
+        /**
+         * LOVES
+         * Steer and arrive at target.
+         */
+
+        // velocity = difference in location
+        var desiredVelocity = Vector.VectorSub(target.location, this.location);
+
+        // get total distance
+        var distanceToTarget = desiredVelocity.mag();
+
+        if (distanceToTarget > this.scale / 2) {
+
+          // normalize so we can adjust
+          desiredVelocity.normalize();
+
+          //
+          var m = distanceToTarget / this.maxSpeed;
+
+          desiredVelocity.mult(m);
+
+          var steer = Vector.VectorSub(desiredVelocity, this.velocity);
+          steer.limit(this.maxSteeringForce * 0.25);
+          return steer;
+        }
+
+        this.angle = Utils.radiansToDegrees(Math.atan2(desiredVelocity.y, desiredVelocity.x));
+
+        this._force.x = 0;
+        this._force.y = 0;
+        return this._force;
+      };
+
+    case 'ACCELERATE':
+      return function(sensor, target) {
+
+        /**
+         * ACCELERATE
+         * Accelerate to max speed.
+         */
+
+        this._force.x = this.velocity.x;
+        this._force.y = this.velocity.y;
+        return this._force.mult(2);
+      };
+
+    case 'DECELERATE':
+      return function(sensor, target) {
+
+        /**
+         * DECELERATE
+         * Decelerate to min speed.
+         */
+
+        this._force.x = this.velocity.x;
+        this._force.y = this.velocity.y;
+        return this._force.mult(-2);
+      };
+  }
+
+};
+
+/**
+ * Checks if a sensor can detect a stimulus object. Note: Assumes
+ * target is a circle.
+ *
+ * @param {Object} target The stimulator.
+ * @return {Boolean} true if sensor's range intersects target.
+ */
+Sensor.prototype._sensorActive = function(target) {
+
+  // Two circles intersect if distance bw centers is less than the sum of the radii.
+  var distance = Vector.VectorDistance(this.location, target.location),
+      sensorRadius = this.sensitivity / 2,
+      targetRadius = target.scale / 2;
+
+  return distance < sensorRadius + targetRadius;
+};
+
+module.exports = Sensor;
+
+},{"./mover":23,"bitshadowmachine":5}],27:[function(require,module,exports){
+var BorderPalette = require('borderpalette'),
+    ColorPalette = require('colorpalette'),
+    config = require('./config').config,
+    Mover = require('./mover'),
+    Utils = require('bitshadowmachine').Utils;
+
+/**
+ * Creates a new Stimulus.
+ *
+ * @constructor
+ * @extends Mover
+ */
+function Stimulus() {
+  Mover.call(this);
+}
+Utils.extend(Stimulus, Mover);
+
+/**
+ * Specific background and box-shadow colors have been added to config.js. When initialized,
+ * a new Stimulus item pulls colors from palettes based on these colors.
+ */
+var i, max, pal, color, border;
+
+/**
+ * By default, Stimulus items get a border style randomly selected
+ * from a predetermined list.
+ * @static
+ * @type {Array}
+ */
+Stimulus.borderStyles = ['double', 'double', 'dotted', 'dashed'];
+Stimulus.palettes = {};
+Stimulus.borderColors = {};
+Stimulus.boxShadowColors = {};
+
+for (i = 0, max = config.defaultColorList.length; i < max; i++) {
+  color = config.defaultColorList[i];
+  pal = new ColorPalette();
+  pal.addColor({
+    min: 20,
+    max: 200,
+    startColor: color.startColor,
+    endColor: color.endColor
+  });
+  Stimulus.palettes[color.name] = pal;
+  Stimulus.borderColors[color.name] = color.borderColor;
+  Stimulus.boxShadowColors[color.name] = color.boxShadowColor;
+}
+
+Stimulus.borderPalette = new BorderPalette();
+for (i = 0, max = Stimulus.borderStyles.length; i < max; i++) {
+  border = Stimulus.borderStyles[i];
+  Stimulus.borderPalette.addBorder({
+    min: 2,
+    max: 10,
+    style: border
+  });
+}
+
+/**
+ * Initializes an instance.
+ *
+ * @param {Object} [options=] A map of initial properties.
+ * @param {Array} [options.mass = 50] Mass.
+ * @param {Array} [options.isStatic = true] isStatic.
+ * @param {Array} [options.width = 50] Width.
+ * @param {Array} [options.height = 50] Height.
+ * @param {Array} [options.opacity = 0.75] Opacity.
+ * @param {Array} [options.color = [255, 255, 255]] Color.
+ * @param {number} [options.borderWidth = this.width / getRandomNumber(2, 8)] Border width.
+ * @param {string} [options.borderStyle = 'double'] Border style.
+ * @param {Array} [options.borderColor = [220, 220, 220]] Border color.
+ * @param {number} [options.borderRadius = 100] Border radius.
+ * @param {number} [options.boxShadowSpread = this.width / getRandomNumber(2, 8)] Box-shadow spread.
+ * @param {Array} [options.boxShadowColor = [200, 200, 200]] Box-shadow color.
+ */
+Stimulus.prototype.init = function(world, opt_options) {
+
+  Stimulus._superClass.init.call(this, world, opt_options);
+
+  var options = opt_options || {};
+
+  if (!options.type || typeof options.type !== 'string') {
+    throw new Error('Stimulus requires \'type\' parameter as a string.');
+  }
+
+  this.type = options.type;
+
+  this.mass = typeof options.mass !== 'undefined' ? options.mass : 50;
+  this.isStatic = typeof options.isStatic !== 'undefined' ? options.isStatic : true;
+  //this.width = typeof options.width !== 'undefined' ? options.width : 50;
+  //this.height = typeof options.height !== 'undefined' ? options.height : 50;
+  this.scale = options.scale || 10;
+  this.opacity = typeof options.opacity !== 'undefined' ? options.opacity : 0.75;
+
+  this.color = options.color || (Stimulus.palettes[this.type] ?
+      Stimulus.palettes[this.type].getColor() : [255, 255, 255]);
+
+  /*this.borderColor = options.borderColor || (Stimulus.palettes[this.type] ?
+    Stimulus.palettes[this.type].getColor() : [220, 220, 220]);
+
+  this.boxShadowColor = options.boxShadowColor || (Stimulus.boxShadowColors[this.type] ?
+    Stimulus.boxShadowColors[this.type] : [200, 200, 200]);
+
+  this.borderWidth = typeof options.borderWidth !== 'undefined' ?
+      options.borderWidth : this.width / Utils.getRandomNumber(2, 8);
+
+  this.borderStyle = typeof options.borderStyle !== 'undefined' ?
+      options.borderStyle : Stimulus.borderPalette.getBorder();
+
+  this.borderRadius = typeof options.borderRadius !== 'undefined' ?
+      options.borderRadius : 100;
+
+  this.boxShadowSpread = typeof options.boxShadowSpread !== 'undefined' ?
+      options.boxShadowSpread : this.width / Utils.getRandomNumber(2, 8);*/
+
+};
+
+module.exports = Stimulus;
+
+},{"./config":21,"./mover":23,"bitshadowmachine":5,"borderpalette":9,"colorpalette":18}],28:[function(require,module,exports){
 var Mover = require('./mover'),
     SimplexNoise = require('quietriot'),
-    Utils = require('burner').Utils,
-    Vector = require('burner').Vector;
+    Utils = require('bitshadowmachine').Utils,
+    Vector = require('bitshadowmachine').Vector;
 
 /**
  * Creates a new Walker.
@@ -3851,5 +4761,5 @@ Walker.prototype.applyAdditionalForces = function() {
 
 module.exports = Walker;
 
-},{"./mover":18,"burner":12,"quietriot":15}]},{},[17])(17)
+},{"./mover":23,"bitshadowmachine":5,"quietriot":19}]},{},[22])(22)
 });

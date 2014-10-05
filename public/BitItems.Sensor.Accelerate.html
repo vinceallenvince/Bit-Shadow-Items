@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+  <title>Bit-Shadow Machine</title>
+  <link href="css/bitshadowmachine.min.css" type="text/css" charset="utf-8" rel="stylesheet" />
+  <script src="scripts/bitshadowmachine.js" type="text/javascript" charset="utf-8"></script>
+  <script src="scripts/bitshadowitems.js" type="text/javascript" charset="utf-8"></script>
+  </head>
+  <body>
+    <div id='worldA'></div>
+    <script type="text/javascript" charset="utf-8">
+
+      var rand = BitShadowMachine.Utils.getRandomNumber,
+          map = BitShadowMachine.Utils.map;
+
+      BitShadowItems.configure(BitShadowMachine.System);
+
+      BitShadowMachine.System.Classes = {
+        Agent: BitShadowItems.Agent,
+        Sensor: BitShadowItems.Sensor,
+        Stimulus: BitShadowItems.Stimulus
+      };
+
+      BitShadowMachine.System.setup(function() {
+
+        var world = this.add('World', {
+          width: 960,
+          height: 540,
+          resolution: 2,
+          el: document.getElementById('worldA'),
+          color: [0, 0, 0],
+          gravity: new BitShadowMachine.Vector(0, 0),
+          c: 0.1
+        });
+
+        for (var i = 0; i < 1; i++) {
+          this.add('Agent', {
+            //angle: rand(0, 359),
+            angle: 90,
+            motorSpeed: 2,
+            minSpeed: 1,
+            maxSpeed: 4,
+            width: 20,
+            height: 20,
+            //location: new BitShadowMachine.Vector(rand(0, world.width), rand(0, world.height)),
+            location: new BitShadowMachine.Vector(world.width * 0.49, world.height * 0.25),
+            checkWorldEdges: false,
+            wrapWorldEdges: true,
+            sensors: [
+              this.add('Sensor', {
+                type: 'heat',
+                behavior: 'ACCELERATE'
+              })
+            ]
+          });
+        }
+
+        for (var i = 0; i < 1; i++) {
+          this.add('Stimulus', {
+            type: 'heat',
+            scale: 5,
+            //location: new BitShadowMachine.Vector(rand(0, world.width), rand(0, world.height))
+            location: new BitShadowMachine.Vector(world.width * 0.5, world.height * 0.5)
+          });
+        }
+      });
+      BitShadowMachine.System.loop();
+
+    </script>
+  </body>
+</html>

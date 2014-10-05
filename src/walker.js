@@ -1,7 +1,7 @@
 var Mover = require('./mover'),
     SimplexNoise = require('quietriot'),
-    Utils = require('burner').Utils,
-    Vector = require('burner').Vector;
+    Utils = require('bitshadowmachine').Utils,
+    Vector = require('bitshadowmachine').Vector;
 
 /**
  * Creates a new Walker.
