@@ -1,7 +1,21 @@
+var Utils = require('bitshadowmachine').Utils;
+
 var BitShadowItems = {
+  Agent: require('./agent'),
   Mover: require('./mover'),
   Oscillator: require('./oscillator'),
-  Particle: require('./particle')
+  Particle: require('./particle'),
+  Walker: require('./walker'),
+  configure: function(System) {
+  	var sys = require('bitshadowmachine').System;
+
+  	for (i in System) {
+  		if (System.hasOwnProperty(i)) {
+  			sys[i] = System[i];
+  		}
+  	}
+
+  }
 };
 
 // TODO: add...

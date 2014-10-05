@@ -1,4 +1,4 @@
-!function(e){if("object"==typeof exports)module.exports=e();else if("function"==typeof define&&define.amd)define(e);else{var f;"undefined"!=typeof window?f=window:"undefined"!=typeof global?f=global:"undefined"!=typeof self&&(f=self),f.BitShadowItems=e()}}(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module '"+o+"'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function(e){var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(_dereq_,module,exports){
+!function(e){if("object"==typeof exports&&"undefined"!=typeof module)module.exports=e();else if("function"==typeof define&&define.amd)define([],e);else{var f;"undefined"!=typeof window?f=window:"undefined"!=typeof global?f=global:"undefined"!=typeof self&&(f=self),f.BitShadowItems=e()}}(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 /*global document, window */
 
 /**
@@ -189,11 +189,11 @@ FPSDisplay.show = function() {
 
 module.exports = FPSDisplay;
 
-},{}],2:[function(_dereq_,module,exports){
-var Item = _dereq_('./item');
-var System = _dereq_('./system');
-var Utils = _dereq_('burner').Utils;
-var Vector = _dereq_('burner').Vector;
+},{}],2:[function(require,module,exports){
+var Item = require('./item');
+var System = require('./system');
+var Utils = require('burner').Utils;
+var Vector = require('burner').Vector;
 
 /**
  * Creates a new Anim. Use for frame-based animation in a
@@ -317,10 +317,10 @@ Anim.prototype.advanceFrame = function() {
 module.exports = Anim;
 
 
-},{"./item":4,"./system":6,"burner":12}],3:[function(_dereq_,module,exports){
-var Item = _dereq_('./item');
-var System = _dereq_('./system');
-var Utils = _dereq_('burner').Utils;
+},{"./item":4,"./system":6,"burner":12}],3:[function(require,module,exports){
+var Item = require('./item');
+var System = require('./system');
+var Utils = require('burner').Utils;
 
 /**
  * Creates a new AnimUnit.
@@ -366,9 +366,9 @@ AnimUnit.prototype.step = function() {
 };
 
 module.exports = AnimUnit;
-},{"./item":4,"./system":6,"burner":12}],4:[function(_dereq_,module,exports){
+},{"./item":4,"./system":6,"burner":12}],4:[function(require,module,exports){
 /*global document */
-var Vector = _dereq_('burner').Vector;
+var Vector = require('burner').Vector;
 
 /**
  * Creates a new Item.
@@ -602,29 +602,39 @@ Item.prototype._wrapWorldEdges = function() {
 
 module.exports = Item;
 
-},{"burner":12}],5:[function(_dereq_,module,exports){
+},{"burner":12}],5:[function(require,module,exports){
 var BitShadowMachine = {
-  Anim: _dereq_('./anim'),
-  Item: _dereq_('./item'),
-  SimplexNoise: _dereq_('quietriot'),
-  System: _dereq_('./system'),
-  Vector: _dereq_('burner').Vector,
-  Utils: _dereq_('burner').Utils
+  Anim: require('./anim'),
+  Item: require('./item'),
+  SimplexNoise: require('quietriot'),
+  System: require('./system'),
+  Vector: require('burner').Vector,
+  Utils: require('burner').Utils
 };
 
 BitShadowMachine.System.Classes = {
-  Anim: _dereq_('./anim'),
-  AnimUnit: _dereq_('./animunit')
+  Anim: require('./anim'),
+  AnimUnit: require('./animunit')
 };
 
 module.exports = BitShadowMachine;
-},{"./anim":2,"./animunit":3,"./item":4,"./system":6,"burner":12,"quietriot":15}],6:[function(_dereq_,module,exports){
-var Item = _dereq_('./item');
-var FPSDisplay = _dereq_('fpsdisplay');
-var System = _dereq_('burner').System;
-var Utils = _dereq_('burner').Utils;
-var Vector = _dereq_('burner').Vector;
-var World = _dereq_('./world');
+},{"./anim":2,"./animunit":3,"./item":4,"./system":6,"burner":12,"quietriot":15}],6:[function(require,module,exports){
+/*global window, document */
+/*jshint supernew:true */
+
+var Item = require('./item');
+var FPSDisplay = require('fpsdisplay');
+var Utils = require('burner').Utils;
+var Vector = require('burner').Vector;
+var World = require('./world');
+
+window.requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame ||
+                              window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
+
+/** @namespace */
+var System = {
+  name: 'System'
+};
 
 /**
  * Holds additional classes that can be defined at runtime.
@@ -633,6 +643,58 @@ var World = _dereq_('./world');
 System.Classes = {
   'Item': Item
 };
+
+/**
+ * Holds a vector describing the system gravity.
+ * @memberof System
+ */
+System.gravity = new Vector(0, 1);
+
+/**
+ * Holds a vector describing the system wind.
+ * @memberof System
+ */
+System.wind = new Vector();
+
+/**
+ * Stores references to all items in the system.
+ * @memberof System
+ * @private
+ */
+System._records = [];
+
+/**
+ * Stores references to all items removed from the system.
+ * @memberof System
+ * @private
+ */
+System._pool = [];
+
+/**
+ * Holds the current and last mouse/touch positions relative
+ * to the browser window. Also, holds the current mouse velocity.
+ * @public
+ */
+System.mouse = {
+  location: new Vector(),
+  lastLocation: new Vector(),
+  velocity: new Vector()
+};
+
+/**
+ * Increments with each call to System.loop.
+ * @type {number}
+ * @private
+ */
+System.clock = 0;
+
+/**
+ * System.loop() calls this function. Use to execute
+ * a function in the animation loop outside of any items.
+ * @type {Function}
+ * @private
+ */
+System.frameFunction = null;
 
 /**
  * Stores references to all buffers in the system.
@@ -666,6 +728,12 @@ System.saveStartFrame = -1;
 System.saveEndFrame = -1;
 
 /**
+ * Time in milliseconds to wait before calling animation loop.
+ * @type number
+ */
+System.saveDataTimeoutLength = 500;
+
+/**
  * Defines the properties to save in System.data for each item
  * in each frame.
  * @type Object
@@ -696,6 +764,7 @@ System.saveWorldProperties = {
   name: true,
   width: true,
   height: true,
+  color: true,
   resolution: true,
   colorMode: true
 };
@@ -739,6 +808,35 @@ System.getAllBuffers = function() {
   return System._buffers;
 };
 
+ /**
+  * Call to execute any setup code before starting the animation loop.
+  * @function setup
+  * @param  {Object} opt_func   A function to run before the function exits.
+  * @memberof System
+  */
+System.setup = function(opt_func) {
+
+  var func = opt_func || function() {}, i, l, max;
+
+  document.body.onorientationchange = System.updateOrientation;
+
+  // save the current and last mouse position
+  Utils.addEvent(document, 'mousemove', System._recordMouseLoc);
+
+  // save the current and last touch position
+  Utils.addEvent(window, 'touchstart', System._recordMouseLoc);
+  Utils.addEvent(window, 'touchmove', System._recordMouseLoc);
+  Utils.addEvent(window, 'touchend', System._recordMouseLoc);
+
+  // listen for key up
+  Utils.addEvent(window, 'keyup', System._keyup);
+
+  // save the setup callback in case we need to reset the system.
+  System.setupFunc = func;
+
+  System.setupFunc.call(this);
+};
+
 /**
  * Adds instances of class to _records and calls init on them.
  * @function add
@@ -777,6 +875,41 @@ System.add = function(opt_klass, opt_options, opt_world) {
   obj.init(world, options);
   records.push(obj);
   return obj;
+};
+
+/**
+ * Removes all properties from the passed object.
+ * @param  {Object} obj An object.
+ * @return {Object}     The passed object.
+ */
+System._cleanObj = function(obj) {
+  for (var prop in obj) {
+    if (obj.hasOwnProperty(prop)) {
+      delete obj[prop];
+    }
+  }
+  return obj;
+};
+
+/**
+ * Removes an item from the system.
+ * @function remove
+ * @memberof System
+ * @param {Object} obj The item to remove.
+ */
+System.remove = function (obj) {
+
+  var i, max, records = System._records;
+
+  for (i = 0, max = records.length; i < max; i++) {
+    if (records[i].id === obj.id) {
+      if (records[i].el) {
+        records[i].el.style.visibility = 'hidden'; // hide item
+      }
+      System._pool[System._pool.length] = records.splice(i, 1)[0]; // move record to pool array
+      break;
+    }
+  }
 };
 
 /**
@@ -871,7 +1004,7 @@ System.loop = function(opt_function) {
   }
 
   // check to call frame complete callback.
-  if (System.saveData) {
+  if (System.saveData && System._checkSaveFrame()) {
     System.saveDataComplete(System.clock, System.data);
   }
   System.clock++;
@@ -879,8 +1012,10 @@ System.loop = function(opt_function) {
     FPSDisplay.update(len);
   }
   System.frameFunction.call(this);
-  if (typeof window.requestAnimationFrame !== 'undefined') {
+  if (typeof window.requestAnimationFrame !== 'undefined' && !System._checkSaveFrame()) {
     window.requestAnimationFrame(System.loop);
+  } else {
+    setTimeout(System.loop, System.saveDataTimeoutLength);
   }
 };
 
@@ -1026,6 +1161,119 @@ System._buildStringRGBA = function(item) {
 };
 
 /**
+ * Saves the mouse/touch location relative to the browser window.
+ *
+ * @function _recordMouseLoc
+ * @memberof System
+ * @private
+ */
+System._recordMouseLoc = function(e) {
+
+  var touch, world = System.firstWorld();
+
+  System.mouse.lastLocation.x = System.mouse.location.x;
+  System.mouse.lastLocation.y = System.mouse.location.y;
+
+  if (e.changedTouches) {
+    touch = e.changedTouches[0];
+  }
+
+  /**
+   * Mapping window size to world size allows us to
+   * lead an agent around a world that's not bound
+   * to the window.
+   */
+  if (e.pageX && e.pageY) {
+    System.mouse.location.x = Utils.map(e.pageX, 0, window.innerWidth, 0, world.width);
+    System.mouse.location.y = Utils.map(e.pageY, 0, window.innerHeight, 0, world.height);
+  } else if (e.clientX && e.clientY) {
+    System.mouse.location.x = Utils.map(e.clientX, 0, window.innerWidth, 0, world.width);
+    System.mouse.location.y = Utils.map(e.clientY, 0, window.innerHeight, 0, world.height);
+  } else if (touch) {
+    System.mouse.location.x = touch.pageX;
+    System.mouse.location.y = touch.pageY;
+  }
+
+  System.mouse.velocity.x = System.mouse.lastLocation.x - System.mouse.location.x;
+  System.mouse.velocity.y = System.mouse.lastLocation.y - System.mouse.location.y;
+};
+
+/**
+ * Returns the first world in the system.
+ *
+ * @function firstWorld
+ * @memberof System
+ * @returns {null|Object} An instance of World.
+ */
+System.firstWorld = function() {
+  return this._records.length ? this._records[0] : null;
+};
+
+/**
+ * Returns all worlds.
+ *
+ * @function allWorlds
+ * @memberof System
+ * @return {Array.<World>} An array of worlds.
+ */
+System.allWorlds = function() {
+  return System.getAllItemsByName('World');
+};
+
+/**
+ * Returns an array of items created from the same constructor.
+ *
+ * @function getAllItemsByName
+ * @memberof System
+ * @param {string} name The 'name' property.
+ * @param {Array} [opt_list = this._records] An optional list of items.
+ * @returns {Array} An array of items.
+ */
+System.getAllItemsByName = function(name, opt_list) {
+
+  var i, max, arr = [],
+      list = opt_list || this._records;
+
+  for (i = 0, max = list.length; i < max; i++) {
+    if (list[i].name === name) {
+      arr[arr.length] = list[i];
+    }
+  }
+  return arr;
+};
+
+/**
+ * Returns an array of items with an attribute that matches the
+ * passed 'attr'. If 'opt_val' is passed, 'attr' must equal 'val'.
+ *
+ * @function getAllItemsByAttribute
+ * @memberof System
+ * @param {string} attr The property to match.
+ * @param {*} [opt_val=] The 'attr' parameter must equal this param.
+ * @param {string} name The item's name property must equal this param.
+ * @returns {Array} An array of items.
+ */
+System.getAllItemsByAttribute = function(attr, opt_val, opt_name) { // TODO: add test
+
+  var i, max, arr = [], records = this._records,
+      val = typeof opt_val !== 'undefined' ? opt_val : null,
+      name = opt_name || false;
+
+  for (i = 0, max = records.length; i < max; i++) {
+    if (typeof records[i][attr] !== 'undefined') {
+      if (val !== null && records[i][attr] !== val) {
+        continue;
+      }
+      if (name && records[i].name !== name) {
+        continue;
+      }
+      arr[arr.length] = records[i];
+    }
+  }
+  return arr;
+};
+
+/**
  * Handles keyup events.
  *
  * @function _keyup
@@ -1101,10 +1349,10 @@ System._resetSystem = function() {
 
 module.exports = System;
 
-},{"./item":4,"./world":7,"burner":12,"fpsdisplay":1}],7:[function(_dereq_,module,exports){
-var Item = _dereq_('./item');
-var Utils = _dereq_('burner').Utils;
-var Vector = _dereq_('burner').Vector;
+},{"./item":4,"./world":7,"burner":12,"fpsdisplay":1}],7:[function(require,module,exports){
+var Item = require('./item');
+var Utils = require('burner').Utils;
+var Vector = require('burner').Vector;
 
 /**
  * Creates a new World.
@@ -1189,7 +1437,7 @@ World.prototype.step = function() {};
 
 module.exports = World;
 
-},{"./item":4,"burner":12}],8:[function(_dereq_,module,exports){
+},{"./item":4,"burner":12}],8:[function(require,module,exports){
 /*jshint supernew:true */
 /** @namespace */
 var Utils = {
@@ -1389,9 +1637,9 @@ Utils.capitalizeFirstLetter = function(string) {
 };
 
 module.exports = Utils;
-},{}],9:[function(_dereq_,module,exports){
-module.exports=_dereq_(1)
-},{}],10:[function(_dereq_,module,exports){
+},{}],9:[function(require,module,exports){
+module.exports=require(1)
+},{"/Users/vince/Dev/Foldi/Bit-Shadow-Items/node_modules/bitshadowmachine/node_modules/fpsdisplay/src/fpsdisplay.js":1}],10:[function(require,module,exports){
 /*global exports, Vector */
 /*jshint supernew:true */
 
@@ -1646,10 +1894,10 @@ Vector.prototype.dot = function(vector) {
 };
 
 module.exports = Vector;
-},{}],11:[function(_dereq_,module,exports){
+},{}],11:[function(require,module,exports){
 /*global document */
 
-var Vector = _dereq_('vector2d-lib');
+var Vector = require('vector2d-lib');
 
 /**
  * Creates a new Item.
@@ -1678,6 +1926,22 @@ Item._stylePosition =
     '-moz-transform: translate3d(<x>px, <y>px, 0) rotate(<angle>deg) scale(<scale>, <scale>); ' +
     '-o-transform: translate3d(<x>px, <y>px, 0) rotate(<angle>deg) scale(<scale>, <scale>); ' +
     '-ms-transform: translate3d(<x>px, <y>px, 0) rotate(<angle>deg) scale(<scale>, <scale>);';
+
+/**
+ * The base DOM element to use as the Item view.
+ * @type {string}
+ * @memberof Item
+ * @private
+ */
+Item.baseElement = 'div';
+
+/**
+ * The base DOM element attributes.
+ * @type {Object}
+ * @memberof Item
+ * @private
+ */
+Item.baseElementAttributes = {};
 
 /**
  * Resets all properties.
@@ -1831,7 +2095,12 @@ Item.prototype.init = function(world, opt_options) {
 
   this.id = this.name + Item._idCount;
   if (!this.el) {
-    this.el = document.createElement('div');
+    this.el = document.createElement(Item.baseElement);
+    for (var i in Item.baseElementAttributes) {
+      if (Item.baseElementAttributes.hasOwnProperty(i)) {
+        this.el[i] = Item.baseElementAttributes[i];
+      }
+    }
     this.el.id = this.id;
     this.el.className = 'item ' + this.name.toLowerCase();
     this.el.style.position = 'absolute';
@@ -1992,24 +2261,24 @@ Item.prototype.getCSSText = function(props) {
 
 module.exports = Item;
 
-},{"vector2d-lib":10}],12:[function(_dereq_,module,exports){
+},{"vector2d-lib":10}],12:[function(require,module,exports){
 module.exports = {
-  Item: _dereq_('./item'),
-  System: _dereq_('./system'),
-  Utils: _dereq_('drawing-utils-lib'),
-  Vector: _dereq_('vector2d-lib'),
-  World: _dereq_('./world')
+  Item: require('./item'),
+  System: require('./system'),
+  Utils: require('drawing-utils-lib'),
+  Vector: require('vector2d-lib'),
+  World: require('./world')
 };
 
-},{"./item":11,"./system":13,"./world":14,"drawing-utils-lib":8,"vector2d-lib":10}],13:[function(_dereq_,module,exports){
+},{"./item":11,"./system":13,"./world":14,"drawing-utils-lib":8,"vector2d-lib":10}],13:[function(require,module,exports){
 /*global window, document */
 /*jshint supernew:true */
 
-var Item = _dereq_('./item'),
-    World = _dereq_('./world'),
-    Vector = _dereq_('vector2d-lib'),
-    Utils = _dereq_('drawing-utils-lib'),
-    FPSDisplay = _dereq_('fpsdisplay');
+var Item = require('./item'),
+    World = require('./world'),
+    Vector = require('vector2d-lib'),
+    Utils = require('drawing-utils-lib'),
+    FPSDisplay = require('fpsdisplay');
 
 window.requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame ||
                               window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
@@ -2499,10 +2768,10 @@ System._toggleFPS = function() {
 
 module.exports = System;
 
-},{"./item":11,"./world":14,"drawing-utils-lib":8,"fpsdisplay":9,"vector2d-lib":10}],14:[function(_dereq_,module,exports){
-var Vector = _dereq_('vector2d-lib'),
-    Item = _dereq_('./item'),
-    Utils = _dereq_('drawing-utils-lib');
+},{"./item":11,"./world":14,"drawing-utils-lib":8,"fpsdisplay":9,"vector2d-lib":10}],14:[function(require,module,exports){
+var Vector = require('vector2d-lib'),
+    Item = require('./item'),
+    Utils = require('drawing-utils-lib');
 
 /**
  * Creates a new World.
@@ -2615,7 +2884,7 @@ World.prototype.getCSSText = function(props) {
 
 module.exports = World;
 
-},{"./item":11,"drawing-utils-lib":8,"vector2d-lib":10}],15:[function(_dereq_,module,exports){
+},{"./item":11,"drawing-utils-lib":8,"vector2d-lib":10}],15:[function(require,module,exports){
 /*jshint bitwise:false */
 /**
 * https://gist.github.com/304522
@@ -2746,11 +3015,392 @@ SimplexNoise.dot = function(g, x, y) {
 
 module.exports = SimplexNoise;
 
-},{}],16:[function(_dereq_,module,exports){
+},{}],16:[function(require,module,exports){
+var Item = require('bitshadowmachine').Item,
+		Mover = require('./mover'),
+    System = require('bitshadowmachine').System,
+    Utils = require('bitshadowmachine').Utils,
+    Vector = require('bitshadowmachine').Vector;
+
+/**
+ * Creates a new Agent.
+ *
+ * Agents are basic Flora elements that respond to forces like gravity, attraction,
+ * repulsion, etc. They can also chase after other Agents, organize with other Agents
+ * in a flocking behavior, and steer away from obstacles. They can also follow the mouse.
+ *
+ * @constructor
+ * @extends Mover
+ */
+function Agent(opt_options) {
+  Mover.call(this);
+}
+Utils.extend(Agent, Mover);
+
+/**
+ * Initializes an instance.
+ *
+ * @param {Object} [opt_options=] A map of initial properties.
+ * @param {boolean} [opt_options.followMouse = false] If true, object will follow mouse.
+ * @param {number} [opt_options.maxSteeringForce = 10] Set the maximum strength of any steering force.
+ * @param {Object} [opt_options.seekTarget = null] An object to seek.
+ * @param {boolean} [opt_options.flocking = false] Set to true to apply flocking forces to this object.
+ * @param {number} [opt_options.desiredSeparation = Twice the object's default scale] Sets the desired separation from other objects when flocking = true.
+ * @param {number} [opt_options.separateStrength = 1] The strength of the force to apply to separating when flocking = true.
+ * @param {number} [opt_options.alignStrength = 1] The strength of the force to apply to aligning when flocking = true.
+ * @param {number} [opt_options.cohesionStrength = 1] The strength of the force to apply to cohesion when flocking = true.
+ * @param {Object} [opt_options.flowField = null] If a flow field is set, object will use it to apply a force.
+ * @param {Array} [opt_options.sensors = ] A list of sensors attached to this object.
+ * @param {number} [opt_options.motorSpeed = 2] Motor speed
+ * @param {Array} [opt_options.color = 197, 177, 115] Color.
+ */
+Agent.prototype.init = function(world, opt_options) {
+  Agent._superClass.init.call(this, world, opt_options);
+
+  var options = opt_options || {};
+
+  this.name = options.type || 'Agent';
+  this.followMouse = !!options.followMouse;
+  this.maxSteeringForce = typeof options.maxSteeringForce === 'undefined' ? 5 : options.maxSteeringForce;
+  this.seekTarget = options.seekTarget || null;
+  this.flocking = !!options.flocking;
+  this.separateStrength = typeof options.separateStrength === 'undefined' ? 0.3 : options.separateStrength;
+  this.alignStrength = typeof options.alignStrength === 'undefined' ? 0.2 : options.alignStrength;
+  this.cohesionStrength = typeof options.cohesionStrength === 'undefined' ? 0.1 : options.cohesionStrength;
+  this.flowField = options.flowField || null;
+
+  this.sensors = options.sensors || [];
+  this.motorSpeed = options.motorSpeed || 0;
+
+  this.color = options.color || [197, 177, 115];
+  this.desiredSeparation = typeof options.desiredSeparation === 'undefined' ? this.scale * 2 : options.desiredSeparation;
+
+  //
+
+  this.separateSumForceVector = new Vector(); // used in Agent.separate()
+  this.alignSumForceVector = new Vector(); // used in Agent.align()
+  this.cohesionSumForceVector = new Vector(); // used in Agent.cohesion()
+  this.followTargetVector = new Vector(); // used in Agent.applyAdditionalForces()
+  this.followDesiredVelocity = new Vector(); // used in Agent.follow()
+  this.motorDir = new Vector(); // used in Agent.applyAdditionalForces()
+
+  if (!this.velocity.mag()) {
+    this.velocity.x = 1; // angle = 0;
+    this.velocity.y = 0;
+    this.velocity.normalize();
+    this.velocity.rotate(Utils.degreesToRadians(this.angle));
+    this.velocity.mult(this.motorSpeed);
+  }
+
+  // TODO: test this
+  for (var i = 0, max = this.sensors.length; i < max; i++) {
+    this.sensors[i].parent = this;
+  }
+};
+
+/**
+ * Applies Agent-specific forces.
+ *
+ * @returns {Object} This object's acceleration vector.
+ */
+Agent.prototype.applyAdditionalForces = function() {
+
+  var i, max, sensorActivated, sensor, r, theta, x, y;
+
+  if (this.sensors.length > 0) { // Sensors
+    for (i = 0, max = this.sensors.length; i < max; i += 1) {
+
+      sensor = this.sensors[i];
+
+      r = sensor.offsetDistance; // use angle to calculate x, y
+      theta = Utils.degreesToRadians(this.angle + sensor.offsetAngle);
+      x = r * Math.cos(theta);
+      y = r * Math.sin(theta);
+
+      sensor.location.x = this.location.x;
+      sensor.location.y = this.location.y;
+      sensor.location.add(new Vector(x, y)); // position the sensor
+
+      if (i) {
+        sensor.borderStyle = 'none';
+      }
+
+      if (sensor.activated) {
+        if (typeof sensor.behavior === 'function') {
+          this.applyForce(sensor.behavior.call(this, sensor, sensor.target));
+        } else {
+          this.applyForce(sensor.getBehavior().call(this, sensor, sensor.target));
+        }
+        sensorActivated = true;
+      }
+
+    }
+  }
+
+  /**
+   * If no sensors were activated and this.motorSpeed != 0,
+   * apply a force in the direction of the current velocity.
+   */
+  if (!sensorActivated && this.motorSpeed) {
+    this.motorDir.x = this.velocity.x;
+    this.motorDir.y = this.velocity.y;
+    this.motorDir.normalize();
+    if (this.velocity.mag() > this.motorSpeed) { // decelerate to defaultSpeed
+      this.motorDir.mult(-this.motorSpeed);
+    } else {
+      this.motorDir.mult(this.motorSpeed);
+    }
+    this.applyForce(this.motorDir); // constantly applies a force
+  }
+
+  // TODO: cache a vector for new location
+  if (this.followMouse) { // follow mouse
+    var t = {
+      location: new Vector(System.mouse.location.x,
+          System.mouse.location.y)
+    };
+    this.applyForce(this._seek(t));
+  }
+
+  if (this.seekTarget) { // seek target
+    this.applyForce(this._seek(this.seekTarget));
+  }
+
+  if (this.flowField) { // follow flow field
+    var res = this.flowField.resolution,
+      col = Math.floor(this.location.x/res),
+      row = Math.floor(this.location.y/res),
+      loc, target;
+
+    if (this.flowField.field[col]) {
+
+      loc = this.flowField.field[col][row];
+      if (loc) { // sometimes loc is not available for edge cases
+        this.followTargetVector.x = loc.x;
+        this.followTargetVector.y = loc.y;
+      } else {
+        this.followTargetVector.x = this.location.x;
+        this.followTargetVector.y = this.location.y;
+      }
+      target = {
+        location: this.followTargetVector
+      };
+      this.applyForce(this._follow(target));
+    }
+
+  }
+
+  if (this.flocking) {
+    this._flock(System.getAllItemsByName(this.name));
+  }
+
+  return this.acceleration;
+};
+
+/**
+ * Calculates a steering force to apply to an object seeking another object.
+ *
+ * @param {Object} target The object to seek.
+ * @returns {Object} The force to apply.
+ * @private
+ */
+Agent.prototype._seek = function(target) {
+
+  var world = this.world,
+    desiredVelocity = Vector.VectorSub(target.location, this.location),
+    distanceToTarget = desiredVelocity.mag();
+
+  desiredVelocity.normalize();
+
+  if (distanceToTarget < world.width / 2) { // slow down to arrive at target
+    var m = Utils.map(distanceToTarget, 0, world.width / 2, 0, this.maxSpeed);
+    desiredVelocity.mult(m);
+  } else {
+    desiredVelocity.mult(this.maxSpeed);
+  }
+
+  desiredVelocity.sub(this.velocity);
+  desiredVelocity.limit(this.maxSteeringForce);
+
+  return desiredVelocity;
+};
+
+/**
+ * Calculates a steering force to apply to an object following another object.
+ * Agents with flow fields will use this method to calculate a steering force.
+ *
+ * @param {Object} target The object to follow.
+ * @returns {Object} The force to apply.
+ */
+Agent.prototype._follow = function(target) {
+
+  this.followDesiredVelocity.x = target.location.x;
+  this.followDesiredVelocity.y = target.location.y;
+
+  this.followDesiredVelocity.mult(this.maxSpeed);
+  this.followDesiredVelocity.sub(this.velocity);
+  this.followDesiredVelocity.limit(this.maxSteeringForce);
+
+  return this.followDesiredVelocity;
+};
+
+/**
+ * Bundles flocking behaviors (separate, align, cohesion) into one call.
+ *
+ * @returns {Object} This object's acceleration vector.
+ */
+Agent.prototype._flock = function(items) {
+  this.applyForce(this._separate(items).mult(this.separateStrength));
+  this.applyForce(this._align(items).mult(this.alignStrength));
+  this.applyForce(this._cohesion(items).mult(this.cohesionStrength));
+  return this.acceleration;
+};
+
+/**
+ * Loops through a passed items array and calculates a force to apply
+ * to avoid all items.
+ *
+ * @param {array} items An array of Flora items.
+ * @returns {Object} A force to apply.
+ */
+Agent.prototype._separate = function(items) {
+
+  var i, max, item, diff, d,
+  sum, count = 0, steer;
+
+  this.separateSumForceVector.x = 0;
+  this.separateSumForceVector.y = 0;
+  sum = this.separateSumForceVector;
+
+  for (i = 0, max = items.length; i < max; i += 1) {
+    item = items[i];
+    if (this.id !== item.id) {
+
+      d = this.location.distance(item.location);
+
+      if ((d > 0) && (d < this.desiredSeparation)) {
+        diff = Vector.VectorSub(this.location, item.location);
+        diff.normalize();
+        diff.div(d);
+        sum.add(diff);
+        count += 1;
+      }
+    }
+  }
+  if (count > 0) {
+    sum.div(count);
+    sum.normalize();
+    sum.mult(this.maxSpeed);
+    sum.sub(this.velocity);
+    sum.limit(this.maxSteeringForce);
+    return sum;
+  }
+  return new Vector(); // TODO: do we need this?
+};
+
+/**
+ * Loops through a passed items array and calculates a force to apply
+ * to align with all items.
+ *
+ * @param {array} items An array of Flora items.
+ * @returns {Object} A force to apply.
+ */
+Agent.prototype._align = function(items) {
+
+  var i, max, item, d,
+    neighbordist = this.scale * 2,
+    sum, count = 0, steer;
+
+  this.alignSumForceVector.x = 0;
+  this.alignSumForceVector.y = 0;
+  sum = this.alignSumForceVector;
+
+  for (i = 0, max = items.length; i < max; i += 1) {
+    item = items[i];
+    d = this.location.distance(item.location);
+
+    if ((d > 0) && (d < neighbordist)) {
+      if (this.id !== item.id) {
+        sum.add(item.velocity);
+        count += 1;
+      }
+    }
+  }
+
+  if (count > 0) {
+    sum.div(count);
+    sum.normalize();
+    sum.mult(this.maxSpeed);
+    sum.sub(this.velocity);
+    sum.limit(this.maxSteeringForce);
+    return sum;
+  }
+  return new Vector();
+};
+
+/**
+ * Loops through a passed items array and calculates a force to apply
+ * to stay close to all items.
+ *
+ * @param {array} items An array of Flora items.
+ * @returns {Object} A force to apply.
+ */
+Agent.prototype._cohesion = function(items) {
+
+  var i, max, item, d,
+    neighbordist = this.scale * 2,
+    sum, count = 0, desiredVelocity, steer;
+
+  this.cohesionSumForceVector.x = 0;
+  this.cohesionSumForceVector.y = 0;
+  sum = this.cohesionSumForceVector;
+
+  for (i = 0, max = items.length; i < max; i += 1) {
+    item = items[i];
+    d = this.location.distance(item.location);
+
+    if ((d > 0) && (d < neighbordist)) {
+      if (this.id !== item.id) {
+        sum.add(item.location);
+        count += 1;
+      }
+    }
+  }
+
+  if (count > 0) {
+    sum.div(count);
+    sum.sub(this.location);
+    sum.normalize();
+    sum.mult(this.maxSpeed);
+    sum.sub(this.velocity);
+    sum.limit(this.maxSteeringForce);
+    return sum;
+  }
+  return new Vector();
+};
+
+
+
+module.exports = Agent;
+},{"./mover":18,"bitshadowmachine":5}],17:[function(require,module,exports){
+var Utils = require('bitshadowmachine').Utils;
+
 var BitShadowItems = {
-  Mover: _dereq_('./mover'),
-  Oscillator: _dereq_('./oscillator'),
-  Particle: _dereq_('./particle')
+  Agent: require('./agent'),
+  Mover: require('./mover'),
+  Oscillator: require('./oscillator'),
+  Particle: require('./particle'),
+  Walker: require('./walker'),
+  configure: function(System) {
+  	var sys = require('bitshadowmachine').System;
+
+  	for (i in System) {
+  		if (System.hasOwnProperty(i)) {
+  			sys[i] = System[i];
+  		}
+  	}
+
+  }
 };
 
 // TODO: add...
@@ -2769,11 +3419,11 @@ var BitShadowItems = {
 
 module.exports = BitShadowItems;
 
-},{"./mover":17,"./oscillator":18,"./particle":19}],17:[function(_dereq_,module,exports){
-var Item = _dereq_('bitshadowmachine').Item,
-    System = _dereq_('bitshadowmachine').System,
-    Utils = _dereq_('bitshadowmachine').Utils,
-    Vector = _dereq_('bitshadowmachine').Vector;
+},{"./agent":16,"./mover":18,"./oscillator":19,"./particle":20,"./walker":21,"bitshadowmachine":5}],18:[function(require,module,exports){
+var Item = require('bitshadowmachine').Item,
+    System = require('bitshadowmachine').System,
+    Utils = require('bitshadowmachine').Utils,
+    Vector = require('bitshadowmachine').Vector;
 
 /**
  * Creates a new Mover.
@@ -2793,8 +3443,8 @@ Utils.extend(Mover, Item);
 
 /**
  * Initializes an instance of Mover.
- * @param  {Object} world An instance of World.
- * @param  {Object} opt_options A map of initial properties.
+ * @param {Object} world An instance of World.
+ * @param {Object} opt_options A map of initial properties.
  * @param {string|Array} [opt_options.color = 255, 255, 255] Color.
  * @param {number} [opt_options.borderRadius = 100] Border radius.
  * @param {number} [opt_options.borderWidth = 2] Border width.
@@ -2815,10 +3465,10 @@ Mover.prototype.init = function(world, opt_options) {
   var options = opt_options || {};
 
   this.color = options.color || [255, 255, 255];
-  this.borderRadius = options.borderRadius || 0;
+  /*this.borderRadius = options.borderRadius || 0;
   this.borderWidth = options.borderWidth || 0;
   this.borderStyle = options.borderStyle || 'none';
-  this.borderColor = options.borderColor || [0, 0, 0];
+  this.borderColor = options.borderColor || [0, 0, 0];*/
   this.pointToDirection = typeof options.pointToDirection === 'undefined' ? true : options.pointToDirection;
   this.parent = options.parent || null;
   this.pointToParentDirection = typeof options.pointToParentDirection === 'undefined' ? true : options.pointToParentDirection;
@@ -2939,12 +3589,12 @@ Mover.prototype.step = function() {
 
 module.exports = Mover;
 
-},{"bitshadowmachine":5}],18:[function(_dereq_,module,exports){
-var Item = _dereq_('bitshadowmachine').Item,
-    SimplexNoise = _dereq_('quietriot'),
-    System = _dereq_('bitshadowmachine').System,
-    Utils = _dereq_('bitshadowmachine').Utils,
-    Vector = _dereq_('bitshadowmachine').Vector;
+},{"bitshadowmachine":5}],19:[function(require,module,exports){
+var Item = require('bitshadowmachine').Item,
+    SimplexNoise = require('quietriot'),
+    System = require('bitshadowmachine').System,
+    Utils = require('bitshadowmachine').Utils,
+    Vector = require('bitshadowmachine').Vector;
 
 function Oscillator(opt_options) {
   Item.call(this);
@@ -3026,11 +3676,11 @@ Oscillator.prototype.step = function () {
 
 module.exports = Oscillator;
 
-},{"bitshadowmachine":5,"quietriot":15}],19:[function(_dereq_,module,exports){
-var Item = _dereq_('bitshadowmachine').Item,
-    Mover = _dereq_('./mover'),
-    Utils = _dereq_('bitshadowmachine').Utils,
-    Vector = _dereq_('bitshadowmachine').Vector;
+},{"bitshadowmachine":5,"quietriot":15}],20:[function(require,module,exports){
+var Item = require('bitshadowmachine').Item,
+    Mover = require('./mover'),
+    Utils = require('bitshadowmachine').Utils,
+    Vector = require('bitshadowmachine').Vector;
 
 /**
  * Creates a new Particle object.
@@ -3096,6 +3746,110 @@ Particle.prototype.afterStep = function() {
 
 module.exports = Particle;
 
-},{"./mover":17,"bitshadowmachine":5}]},{},[16])
-(16)
+},{"./mover":18,"bitshadowmachine":5}],21:[function(require,module,exports){
+var Mover = require('./mover'),
+    SimplexNoise = require('quietriot'),
+    Utils = require('burner').Utils,
+    Vector = require('burner').Vector;
+
+/**
+ * Creates a new Walker.
+ *
+ * Walkers have no seeking, steering or directional behavior and just randomly
+ * explore their World. Use Walkers to create wandering objects or targets
+ * for Agents to seek. They are not affected by gravity or friction.
+ *
+ * @constructor
+ * @extends Mover
+ */
+function Walker(opt_options) {
+  Mover.call(this);
+}
+Utils.extend(Walker, Mover);
+
+/**
+ * Initializes an instance.
+ *
+ * @param {Object} [opt_options=] A map of initial properties.
+ * @param {number} [opt_options.width = 10] Width.
+ * @param {number} [opt_options.height = 10] Height.
+ * @param {boolean} [opt_options.remainsOnScreen = false] If set to true and perlin = true, object will avoid world edges.
+ * @param {number} [opt_options.maxSpeed = 1] maxSpeed.
+ * @param {boolean} [opt_options.perlin = true] If set to true, object will use Perlin Noise to calculate its location.
+ * @param {number} [opt_options.perlinSpeed = 0.005] If perlin = true, perlinSpeed determines how fast the object location moves through the noise space.
+ * @param {number} [opt_options.perlinTime = 0] Sets the Perlin Noise time.
+ * @param {number} [opt_options.perlinAccelLow = -0.075] The lower bound of acceleration when perlin = true.
+ * @param {number} [opt_options.perlinAccelHigh = 0.075] The upper bound of acceleration when perlin = true.
+ * @param {number} [opt_options.perlinOffsetX = Math.random() * 10000] The x offset in the Perlin Noise space.
+ * @param {number} [opt_options.perlinOffsetY = Math.random() * 10000] The y offset in the Perlin Noise space.
+ * @param {string|Array} [opt_options.color = 255, 150, 50] Color.
+ * @param {string|number} [opt_options.borderWidth = '1em'] Border width.
+ * @param {string} [opt_options.borderStyle = 'double'] Border style.
+ * @param {string|Array} [opt_options.borderColor = 255, 255, 255] Border color.
+ * @param {string} [opt_options.borderRadius = 100] Border radius.
+ * @param {number} [opt_options.opacity = 0.75] The object's opacity.
+ * @param {number} [opt_options.zIndex = 1] The object's zIndex.
+ */
+Walker.prototype.init = function(world, opt_options) {
+  Walker._superClass.init.call(this, world, opt_options);
+
+  var options = opt_options || {};
+
+  this.width = typeof options.width === 'undefined' ? 10 : options.width;
+  this.height = typeof options.height === 'undefined' ? 10 : options.height;
+  this.remainsOnScreen = !!options.remainsOnScreen;
+  this.maxSpeed = typeof options.maxSpeed === 'undefined' ? 1 : options.maxSpeed;
+  this.perlin = typeof options.perlin === 'undefined' ? true : options.perlin;
+  this.perlinSpeed = typeof options.perlinSpeed === 'undefined' ? 0.005 : options.perlinSpeed;
+  this.perlinTime = options.perlinTime || 0;
+  this.perlinAccelLow = typeof options.perlinAccelLow === 'undefined' ? -0.075 : options.perlinAccelLow;
+  this.perlinAccelHigh = typeof options.perlinAccelHigh === 'undefined' ? 0.075 : options.perlinAccelHigh;
+  this.perlinOffsetX = typeof options.perlinOffsetX === 'undefined' ? Math.random() * 10000 : options.perlinOffsetX;
+  this.perlinOffsetY = typeof options.perlinOffsetY === 'undefined' ? Math.random() * 10000 : options.perlinOffsetY;
+  this.color = options.color || [255, 150, 50];
+  this.borderWidth = typeof options.borderWidth === 'undefined' ? 0 : options.borderWidth;
+  this.borderStyle = options.borderStyle || 'none';
+  this.borderColor = options.borderColor || [255, 255, 255];
+  this.borderRadius = typeof options.borderRadius === 'undefined' ? 100 : options.borderRadius;
+  this.opacity = typeof options.opacity === 'undefined' ? 1 : options.opacity;
+  this.zIndex = typeof options.zIndex === 'undefined' ? 0 : options.zIndex;
+
+  this._randomVector = new Vector();
+};
+
+/**
+ * If walker uses perlin noise, updates acceleration based on noise space. If walker
+ * is a random walker, updates location based on random location.
+ */
+Walker.prototype.applyAdditionalForces = function() {
+
+  // walker use either perlin noise or random walk
+  if (this.perlin) {
+
+    this.perlinTime += this.perlinSpeed;
+
+    if (this.remainsOnScreen) {
+      this.acceleration = new Vector();
+      this.velocity = new Vector();
+      this.location.x =  Utils.map(SimplexNoise.noise(this.perlinTime + this.perlinOffsetX, 0), -1, 1, 0, this.world.width);
+      this.location.y =  Utils.map(SimplexNoise.noise(0, this.perlinTime + this.perlinOffsetY), -1, 1, 0, this.world.height);
+    } else {
+      this.acceleration.x =  Utils.map(SimplexNoise.noise(this.perlinTime + this.perlinOffsetX, 0), -1, 1, this.perlinAccelLow, this.perlinAccelHigh);
+      this.acceleration.y =  Utils.map(SimplexNoise.noise(0, this.perlinTime + this.perlinOffsetY), -1, 1, this.perlinAccelLow, this.perlinAccelHigh);
+    }
+    return;
+  }
+
+  // point to a random angle and move toward it
+  this._randomVector.x = 1;
+  this._randomVector.y = 1;
+  this._randomVector.normalize();
+  this._randomVector.rotate(Utils.degreesToRadians(Utils.getRandomNumber(0, 359)));
+  this._randomVector.mult(this.maxSpeed);
+  this.applyForce(this._randomVector);
+};
+
+module.exports = Walker;
+
+},{"./mover":18,"burner":12,"quietriot":15}]},{},[17])(17)
 });

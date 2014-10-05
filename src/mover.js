@@ -21,8 +21,8 @@ Utils.extend(Mover, Item);
 
 /**
  * Initializes an instance of Mover.
- * @param  {Object} world An instance of World.
- * @param  {Object} opt_options A map of initial properties.
+ * @param {Object} world An instance of World.
+ * @param {Object} opt_options A map of initial properties.
  * @param {string|Array} [opt_options.color = 255, 255, 255] Color.
  * @param {number} [opt_options.borderRadius = 100] Border radius.
  * @param {number} [opt_options.borderWidth = 2] Border width.
@@ -43,10 +43,10 @@ Mover.prototype.init = function(world, opt_options) {
   var options = opt_options || {};
 
   this.color = options.color || [255, 255, 255];
-  this.borderRadius = options.borderRadius || 0;
+  /*this.borderRadius = options.borderRadius || 0;
   this.borderWidth = options.borderWidth || 0;
   this.borderStyle = options.borderStyle || 'none';
-  this.borderColor = options.borderColor || [0, 0, 0];
+  this.borderColor = options.borderColor || [0, 0, 0];*/
   this.pointToDirection = typeof options.pointToDirection === 'undefined' ? true : options.pointToDirection;
   this.parent = options.parent || null;
   this.pointToParentDirection = typeof options.pointToParentDirection === 'undefined' ? true : options.pointToParentDirection;
