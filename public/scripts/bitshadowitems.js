@@ -4097,36 +4097,21 @@ Sensor.prototype.init = function(world, opt_options) {
   this.targetClass = options.targetClass || 'Stimulus';
   this.behavior = options.behavior || function() {};
   this.sensitivity = typeof options.sensitivity !== 'undefined' ? options.sensitivity : 40;
-  //this.width = typeof options.width !== 'undefined' ? options.width : 7;
-  //this.height = typeof options.height !== 'undefined' ? options.height : 7;
   this.offsetDistance = typeof options.offsetDistance !== 'undefined' ? options.offsetDistance : 15;
   this.offsetAngle = options.offsetAngle || 0;
-  this.opacity = typeof options.opacity !== 'undefined' ? options.opacity : 0.75;
+  this.opacity = typeof options.opacity !== 'undefined' ? options.opacity : 0;
   this.target = options.target || null;
   this.activated = !!options.activated;
   this.activatedColor = options.activatedColor || [255, 255, 255];
-  //this.borderRadius = typeof options.borderRadius !== 'undefined' ? options.borderRadius : 100;
-  //this.borderWidth = typeof options.borderWidth !== 'undefined' ? options.borderWidth : 2;
-  //this.borderStyle = options.borderStyle || 'solid';
-  //this.borderColor = options.borderColor || [255, 255, 255];
   this.onConsume = options.onConsume || null;
   this.onDestroy = options.onDestroy || null;
-  /*this.rangeDisplayBorderStyle = options.rangeDisplayBorderStyle || false;
-  this.rangeDisplayBorderDefaultColor = options.rangeDisplayBorderDefaultColor || false;
   this.parent = options.parent || null;
-  this.displayRange = !!options.displayRange;
-  if (this.displayRange) {
-    this.rangeDisplay = System.add('RangeDisplay', {
-      sensor: this,
-      rangeDisplayBorderStyle: this.rangeDisplayBorderStyle,
-      rangeDisplayBorderDefaultColor: this.rangeDisplayBorderDefaultColor
-    });
-  }
-  this.displayConnector = !!options.displayConnector;*/
+  this.delay = options.delay || 0;
 
   this.activationLocation = new Vector();
   this._force = new Vector(); // used as a cache Vector
   this.visibility = 'hidden';
+  this.clock = 0;
 };
 
 /**
@@ -4165,42 +4150,45 @@ Sensor.prototype.step = function() {
    * loop thru the list and check if sensor should activate.
    */
 
-  var list = System.getAllItemsByAttribute('type', this.type, this.targetClass || 'Stimulus');
+  if (this.delay <= this.clock) {
 
-  for (var i = 0, max = list.length; i < max; i++) {
+    var list = System.getAllItemsByAttribute('type', this.type, this.targetClass || 'Stimulus');
 
-    if (this._sensorActive(list[i], this.sensitivity)) {
+    for (var i = 0, max = list.length; i < max; i++) {
 
-      this.target = list[i]; // target this stimulator
-      if (!this.activationLocation.x && !this.activationLocation.y) {
-        this.activationLocation.x = this.parent.location.x;
-        this.activationLocation.y = this.parent.location.y;
+      if (this._sensorActive(list[i], this.sensitivity)) {
+
+        this.target = list[i]; // target this stimulator
+        if (!this.activationLocation.x && !this.activationLocation.y) {
+          this.activationLocation.x = this.parent.location.x;
+          this.activationLocation.y = this.parent.location.y;
+        }
+        this.activated = true; // set activation
+        this.activatedColor = this.target.color;
+
+        if (this.displayConnector && !this.connector) {
+          this.connector = System.add('Connector', {
+            parentA: this,
+            parentB: this.target
+          });
+        }
+
+        if (this.displayConnector && this.connector && this.connector.parentB !== this.target) {
+          this.connector.parentA = this;
+          this.connector.parentB = this.target;
+        }
+
+        check = true;
       }
-      this.activated = true; // set activation
-      this.activatedColor = this.target.color;
-
-      if (this.displayConnector && !this.connector) {
-        this.connector = System.add('Connector', {
-          parentA: this,
-          parentB: this.target
-        });
-      }
-
-      if (this.displayConnector && this.connector && this.connector.parentB !== this.target) {
-        this.connector.parentA = this;
-        this.connector.parentB = this.target;
-      }
-
-      check = true;
     }
   }
-
 
   if (!check) {
     this.target = null;
     this.activated = false;
     this.state = null;
     this.color = [255, 255, 255];
+    this.opacity = 0.1;
     this.activationLocation.x = null;
     this.activationLocation.y = null;
     if (this.connector) {
@@ -4208,9 +4196,10 @@ Sensor.prototype.step = function() {
       this.connector = null;
     }
   } else {
-    this.color = this.activatedColor;
+    this.opacity = 0.5;
   }
 
+  this.clock++;
   this.afterStep.call(this);
 };
 
