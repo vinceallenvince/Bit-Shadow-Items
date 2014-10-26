@@ -130,18 +130,20 @@
               type: 'Wolf',
               targetClass: 'Wolf',
               sensitivity: 75,
-              behavior: 'COWARD'
-            }),
+              behavior: 'COWARD',
+              minOpacity: 0.25,
+              maxOpacity: 0.5
+            })/*,
             BitShadowMachine.System.add('Sensor', {
               type: 'Zombie',
               targetClass: 'Zombie',
               sensitivity: 100,
               behavior: 'AGGRESSIVE',
               delay: 100
-            })
+            })*/
           ],
           beforeStep: function() {
-
+            return;
             var zombies = BitShadowMachine.System.getAllItemsByAttribute('type', 'Zombie', 'Zombie');
 
             for (var i = zombies.length - 1; i >= 0; i--) {
@@ -186,7 +188,9 @@
               targetClass: 'Wolf',
               sensitivity: 200,
               behavior: 'AGGRESSIVE',
-              delay: 100
+              delay: 100,
+              minOpacity: 0.25,
+              maxOpacity: 0.5
             })
           ],
           beforeStep: function() {
@@ -231,7 +235,7 @@
           c: 0.1
         });
 
-        for (var i = 0; i < 120; i++) {
+        for (var i = 0; i < 220; i++) {
           createSheep(world.width * 0.05, world.height / 2);
         }
 

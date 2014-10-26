@@ -64,14 +64,16 @@
               targetClass: 'Sheep',
               sensitivity: 100,
               behavior: 'AGGRESSIVE',
-              delay: 100
-            }),
+              delay: 100,
+              minOpacity: 0.25,
+              maxOpacity: 0.5
+            })/*,
             BitShadowMachine.System.add('Sensor', {
               type: 'Zombie',
               targetClass: 'Zombie',
               sensitivity: 100,
               behavior: 'COWARD'
-            })
+            })*/
           ],
           beforeStep: function() {
 
@@ -90,16 +92,16 @@
                 sheep[i].caught = true;
 
                 if (rand(1, 2) === 1) {
-                  var wolves = BitShadowMachine.System.getAllItemsByAttribute('type', 'Wolf', 'Wolf');
+                  /*var wolves = BitShadowMachine.System.getAllItemsByAttribute('type', 'Wolf', 'Wolf');
                   if (wolves.length > 2) {
                     createZombie(sheep[i].location.x, sheep[i].location.y, this.velocity.mult(-1));
                   } else {
                     createWolf(sheep[i].location.x, sheep[i].location.y);
-                  }
+                  }*/
                   /*
                    Uncomment createWolf below and comment createZombie to create unbalanced system.
                   */
-                  //createWolf(sheep[i].location.x, sheep[i].location.y);
+                  createWolf(sheep[i].location.x, sheep[i].location.y);
                 } else {
                   createWolf(sheep[i].location.x, sheep[i].location.y);
                 }
@@ -130,18 +132,20 @@
               type: 'Wolf',
               targetClass: 'Wolf',
               sensitivity: 75,
-              behavior: 'COWARD'
-            }),
+              behavior: 'COWARD',
+              minOpacity: 0.25,
+              maxOpacity: 0.5
+            })/*,
             BitShadowMachine.System.add('Sensor', {
               type: 'Zombie',
               targetClass: 'Zombie',
               sensitivity: 100,
               behavior: 'AGGRESSIVE',
               delay: 100
-            })
+            })*/
           ],
           beforeStep: function() {
-
+            return;
             var zombies = BitShadowMachine.System.getAllItemsByAttribute('type', 'Zombie', 'Zombie');
 
             for (var i = zombies.length - 1; i >= 0; i--) {

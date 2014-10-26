@@ -29,6 +29,8 @@ Utils.extend(Sensor, Mover);
  * @param {number} [opt_options.offsetDistance = 30] The distance from the center of the sensor's parent.
  * @param {number} [opt_options.offsetAngle = 0] The angle of rotation around the vehicle carrying the sensor.
  * @param {number} [opt_options.opacity = 0.75] Opacity.
+ * @param {number} [opt_options.minOpacity = 0.1] Min opacity.
+ * @param {number} [opt_options.maxOpacity = 0.5] Max opacity.
  * @param {Object} [opt_options.target = null] A stimulator.
  * @param {boolean} [opt_options.activated = false] True if sensor is close enough to detect a stimulator.
  * @param {Array} [opt_options.activatedColor = [255, 255, 255]] The color the sensor will display when activated.
@@ -51,6 +53,8 @@ Sensor.prototype.init = function(world, opt_options) {
   this.offsetDistance = typeof options.offsetDistance !== 'undefined' ? options.offsetDistance : 15;
   this.offsetAngle = options.offsetAngle || 0;
   this.opacity = typeof options.opacity !== 'undefined' ? options.opacity : 0;
+  this.minOpacity = typeof options.minOpacity !== 'undefined' ? options.minOpacity : 0.1;
+  this.maxOpacity = typeof options.maxOpacity !== 'undefined' ? options.maxOpacity : 0.5;
   this.target = options.target || null;
   this.activated = !!options.activated;
   this.activatedColor = options.activatedColor || [255, 255, 255];
@@ -139,7 +143,7 @@ Sensor.prototype.step = function() {
     this.activated = false;
     this.state = null;
     this.color = [255, 255, 255];
-    this.opacity = 0.1;
+    this.opacity = this.minOpacity;
     this.activationLocation.x = null;
     this.activationLocation.y = null;
     if (this.connector) {
@@ -147,7 +151,7 @@ Sensor.prototype.step = function() {
       this.connector = null;
     }
   } else {
-    this.opacity = 0.5;
+    this.opacity = this.maxOpacity;
   }
 
   this.clock++;
