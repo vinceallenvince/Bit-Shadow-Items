@@ -3621,7 +3621,7 @@ Agent.prototype._cohesion = function(items) {
 
 
 module.exports = Agent;
-},{"./mover":23,"bitshadowmachine":5}],21:[function(require,module,exports){
+},{"./mover":24,"bitshadowmachine":5}],21:[function(require,module,exports){
 /**
  * @namespace
  */
@@ -3684,13 +3684,75 @@ var config = {
 module.exports.config = config;
 
 },{}],22:[function(require,module,exports){
+var Item = require('bitshadowmachine').Item,
+    Utils = require('bitshadowmachine').Utils,
+    Vector = require('bitshadowmachine').Vector;
+
+/**
+ * Creates a new Food.
+ *
+ * Foods are the most basic Flora item. They represent a fixed point in
+ * 2D space and are just an extension of Burner Item with isStatic set to true.
+ *
+ * @constructor
+ * @extends Item
+ */
+function Food() {
+  Item.call(this);
+}
+Utils.extend(Food, Item);
+
+/**
+ * Initializes an instance of Food.
+ *
+ * @param {Object} [opt_options=] A map of initial properties.
+ * @param {Array} [opt_options.color = 200, 200, 200] Color.
+ */
+Food.prototype.init = function(world, opt_options) {
+  Food._superClass.init.call(this, world, opt_options);
+
+  var options = opt_options || {};
+
+  this.name = options.type || 'Food';
+  this.color = options.color || [200, 200, 200];
+  this.offsetDistance = typeof options.offsetDistance === 'undefined' ? -10 : options.offsetDistance;
+  this.offsetAngle = options.offsetAngle || 0;
+
+  this.offsetVector = new Vector();
+};
+
+Food.prototype.step = function() {
+
+	if (this.parent) {
+		if (this.offsetDistance) {
+			var r = this.offsetDistance; // use angle to calculate x, y
+	    var theta = Utils.degreesToRadians(this.parent.angle + this.offsetAngle);
+	    var x = r * Math.cos(theta);
+	    var y = r * Math.sin(theta);
+
+	    this.location.x = this.parent.location.x;
+	    this.location.y = this.parent.location.y;
+	    this.offsetVector.x = x;
+	    this.offsetVector.y = y;
+	    this.location.add(this.offsetVector); // position the child
+  	} else {
+	  	this.location.x = this.parent.location.x;
+			this.location.y = this.parent.location.y;
+		}
+	}
+};
+
+module.exports = Food;
+},{"bitshadowmachine":5}],23:[function(require,module,exports){
 var Utils = require('bitshadowmachine').Utils;
 
 var BitShadowItems = {
   Agent: require('./agent'),
+  Food: require('./food'),
   Mover: require('./mover'),
   Oscillator: require('./oscillator'),
   Particle: require('./particle'),
+  Point: require('./point'),
   Sensor: require('./sensor'),
   Stimulus: require('./stimulus'),
   Walker: require('./walker'),
@@ -3713,13 +3775,12 @@ var BitShadowItems = {
 //Dragger: require('./dragger'),
 //FlowField: require('./flowfield'),
 //ParticleSystem: require('./particlesystem'),
-//Point: require('./point'),
 //Repeller: require('./repeller'),
 
 
 module.exports = BitShadowItems;
 
-},{"./agent":20,"./mover":23,"./oscillator":24,"./particle":25,"./sensor":26,"./stimulus":27,"./walker":28,"bitshadowmachine":5}],23:[function(require,module,exports){
+},{"./agent":20,"./food":22,"./mover":24,"./oscillator":25,"./particle":26,"./point":27,"./sensor":28,"./stimulus":29,"./walker":30,"bitshadowmachine":5}],24:[function(require,module,exports){
 var Item = require('bitshadowmachine').Item,
     System = require('bitshadowmachine').System,
     Utils = require('bitshadowmachine').Utils,
@@ -3889,7 +3950,7 @@ Mover.prototype.step = function() {
 
 module.exports = Mover;
 
-},{"bitshadowmachine":5}],24:[function(require,module,exports){
+},{"bitshadowmachine":5}],25:[function(require,module,exports){
 var Item = require('bitshadowmachine').Item,
     SimplexNoise = require('quietriot'),
     System = require('bitshadowmachine').System,
@@ -3976,7 +4037,7 @@ Oscillator.prototype.step = function () {
 
 module.exports = Oscillator;
 
-},{"bitshadowmachine":5,"quietriot":19}],25:[function(require,module,exports){
+},{"bitshadowmachine":5,"quietriot":19}],26:[function(require,module,exports){
 var Item = require('bitshadowmachine').Item,
     Mover = require('./mover'),
     Utils = require('bitshadowmachine').Utils,
@@ -4046,7 +4107,51 @@ Particle.prototype.afterStep = function() {
 
 module.exports = Particle;
 
-},{"./mover":23,"bitshadowmachine":5}],26:[function(require,module,exports){
+},{"./mover":24,"bitshadowmachine":5}],27:[function(require,module,exports){
+var Item = require('bitshadowmachine').Item,
+    Utils = require('bitshadowmachine').Utils;
+
+/**
+ * Creates a new Point.
+ *
+ * Points are the most basic Flora item. They represent a fixed point in
+ * 2D space and are just an extension of Burner Item with isStatic set to true.
+ *
+ * @constructor
+ * @extends Item
+ */
+function Point() {
+  Item.call(this);
+}
+Utils.extend(Point, Item);
+
+/**
+ * Initializes an instance of Point.
+ *
+ * @param {Object} [opt_options=] A map of initial properties.
+ * @param {Array} [opt_options.color = 200, 200, 200] Color.
+ * @param {Array} [opt_options.isStatic = true] Static.
+ */
+Point.prototype.init = function(world, opt_options) {
+  Point._superClass.init.call(this, world, opt_options);
+
+  var options = opt_options || {};
+
+  this.name = options.type || 'Point';
+  this.color = options.color || [200, 200, 200];
+  this.isStatic = typeof options.isStatic === 'undefined' ? true : options.isStatic;
+};
+
+Point.prototype.step = function() {
+	this.beforeStep.call(this);
+	if (this.parent && !this.isStatic && !this.special) {
+		this.location.x = this.parent.location.x;
+		this.location.y = this.parent.location.y;
+	}
+};
+
+module.exports = Point;
+},{"bitshadowmachine":5}],28:[function(require,module,exports){
 var Mover = require('./mover'),
     System = require('bitshadowmachine').System,
     Utils = require('bitshadowmachine').Utils,
@@ -4078,8 +4183,8 @@ Utils.extend(Sensor, Mover);
  * @param {number} [opt_options.offsetDistance = 30] The distance from the center of the sensor's parent.
  * @param {number} [opt_options.offsetAngle = 0] The angle of rotation around the vehicle carrying the sensor.
  * @param {number} [opt_options.opacity = 0.75] Opacity.
- * @param {number} [opt_options.minOpacity = 0.75] Min opacity.
- * @param {number} [opt_options.maxOpacity = 0.75] Max opacity.
+ * @param {number} [opt_options.minOpacity = 0.1] Min opacity.
+ * @param {number} [opt_options.maxOpacity = 0.5] Max opacity.
  * @param {Object} [opt_options.target = null] A stimulator.
  * @param {boolean} [opt_options.activated = false] True if sensor is close enough to detect a stimulator.
  * @param {Array} [opt_options.activatedColor = [255, 255, 255]] The color the sensor will display when activated.
@@ -4160,7 +4265,7 @@ Sensor.prototype.step = function() {
 
     for (var i = 0, max = list.length; i < max; i++) {
 
-      if (this._sensorActive(list[i], this.sensitivity)) {
+      if (this._sensorActive(list[i], this.sensitivity) && !list[i].parent) {
 
         this.target = list[i]; // target this stimulator
         if (!this.activationLocation.x && !this.activationLocation.y) {
@@ -4170,19 +4275,8 @@ Sensor.prototype.step = function() {
         this.activated = true; // set activation
         this.activatedColor = this.target.color;
 
-        if (this.displayConnector && !this.connector) {
-          this.connector = System.add('Connector', {
-            parentA: this,
-            parentB: this.target
-          });
-        }
-
-        if (this.displayConnector && this.connector && this.connector.parentB !== this.target) {
-          this.connector.parentA = this;
-          this.connector.parentB = this.target;
-        }
-
         check = true;
+        break;
       }
     }
   }
@@ -4529,7 +4623,7 @@ Sensor.prototype._sensorActive = function(target) {
 
 module.exports = Sensor;
 
-},{"./mover":23,"bitshadowmachine":5}],27:[function(require,module,exports){
+},{"./mover":24,"bitshadowmachine":5}],29:[function(require,module,exports){
 var BorderPalette = require('borderpalette'),
     ColorPalette = require('colorpalette'),
     config = require('./config').config,
@@ -4649,7 +4743,7 @@ Stimulus.prototype.init = function(world, opt_options) {
 
 module.exports = Stimulus;
 
-},{"./config":21,"./mover":23,"bitshadowmachine":5,"borderpalette":9,"colorpalette":18}],28:[function(require,module,exports){
+},{"./config":21,"./mover":24,"bitshadowmachine":5,"borderpalette":9,"colorpalette":18}],30:[function(require,module,exports){
 var Mover = require('./mover'),
     SimplexNoise = require('quietriot'),
     Utils = require('bitshadowmachine').Utils,
@@ -4754,5 +4848,5 @@ Walker.prototype.applyAdditionalForces = function() {
 
 module.exports = Walker;
 
-},{"./mover":23,"bitshadowmachine":5,"quietriot":19}]},{},[22])(22)
+},{"./mover":24,"bitshadowmachine":5,"quietriot":19}]},{},[23])(23)
 });

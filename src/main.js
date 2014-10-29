@@ -2,9 +2,11 @@ var Utils = require('bitshadowmachine').Utils;
 
 var BitShadowItems = {
   Agent: require('./agent'),
+  Food: require('./food'),
   Mover: require('./mover'),
   Oscillator: require('./oscillator'),
   Particle: require('./particle'),
+  Point: require('./point'),
   Sensor: require('./sensor'),
   Stimulus: require('./stimulus'),
   Walker: require('./walker'),
@@ -27,7 +29,6 @@ var BitShadowItems = {
 //Dragger: require('./dragger'),
 //FlowField: require('./flowfield'),
 //ParticleSystem: require('./particlesystem'),
-//Point: require('./point'),
 //Repeller: require('./repeller'),
 
 

@@ -111,7 +111,7 @@ Sensor.prototype.step = function() {
 
     for (var i = 0, max = list.length; i < max; i++) {
 
-      if (this._sensorActive(list[i], this.sensitivity)) {
+      if (this._sensorActive(list[i], this.sensitivity) && !list[i].parent) {
 
         this.target = list[i]; // target this stimulator
         if (!this.activationLocation.x && !this.activationLocation.y) {
@@ -121,19 +121,8 @@ Sensor.prototype.step = function() {
         this.activated = true; // set activation
         this.activatedColor = this.target.color;
 
-        if (this.displayConnector && !this.connector) {
-          this.connector = System.add('Connector', {
-            parentA: this,
-            parentB: this.target
-          });
-        }
-
-        if (this.displayConnector && this.connector && this.connector.parentB !== this.target) {
-          this.connector.parentA = this;
-          this.connector.parentB = this.target;
-        }
-
         check = true;
+        break;
       }
     }
   }

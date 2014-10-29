@@ -6,10 +6,35 @@
   <link href="css/bitshadowmachine.min.css" type="text/css" charset="utf-8" rel="stylesheet" />
   <script src="scripts/bitshadowmachine.js" type="text/javascript" charset="utf-8"></script>
   <script src="scripts/bitshadowitems.js" type="text/javascript" charset="utf-8"></script>
+  <script src="scripts/colorpalette.min.js" type="text/javascript" charset="utf-8"></script>
   </head>
   <body>
     <div id='worldA'></div>
     <script type="text/javascript" charset="utf-8">
+
+      var paletteWolf = new ColorPalette();
+      paletteWolf.addColor({
+        min: 8,
+        max: 24,
+        startColor: [255, 130, 49],
+        endColor: [223, 88, 1]
+      });
+
+      var paletteSheep = new ColorPalette();
+      paletteSheep.addColor({
+        min: 8,
+        max: 24,
+        startColor: [219, 203, 154],
+        endColor: [157, 135, 68]
+      });
+
+      var paletteZombies = new ColorPalette();
+      paletteZombies.addColor({
+        min: 8,
+        max: 24,
+        startColor: [119, 255, 172],
+        endColor: [0, 190, 74]
+      });
 
       function isInside(obj, container) {
         if (!obj || !container) {
@@ -51,7 +76,7 @@
 
         var wolf = BitShadowMachine.System.add('Agent', {
           type: 'Wolf',
-          color: [255, 100, 0],
+          color: paletteWolf.getColor(),
           maxSpeed: 4,
           wrapWorldEdges: true,
           motorSpeed: 1,
@@ -84,7 +109,7 @@
                   BitShadowMachine.System.remove(sheep[i].sensors[j]);
                 }
                 //BitShadowMachine.System.remove(sheep[i]);
-                sheep[i].scale = 2;
+                sheep[i].scale = 3;
                 sheep[i].life = 0;
                 sheep[i].lifespan = caughtDuration;
                 sheep[i].caught = true;
@@ -106,6 +131,10 @@
 
               }
             }
+
+            if (this.caught && this.scale > 0.1) {
+              this.scale -= 0.1;
+            }
           }
         });
         wolf.type = 'Wolf';
@@ -119,6 +148,7 @@
 
         var sheep = BitShadowMachine.System.add('Agent', {
           type: 'Sheep',
+          color: paletteSheep.getColor(),
           maxSpeed: 2,
           motorSpeed: 0.5,
           wrapWorldEdges: true,
@@ -151,7 +181,7 @@
                   BitShadowMachine.System.remove(zombies[i].sensors[j]);
                 }
                 //BitShadowMachine.System.remove(zombies[i]);
-                zombies[i].scale = 2;
+                zombies[i].scale = 3;
                 zombies[i].life = 0;
                 zombies[i].lifespan = caughtDuration;
                 zombies[i].caught = true;
@@ -160,6 +190,10 @@
                 //createWolf(zombies[i].location.x, zombies[i].location.y, this.velocity.mult(-1));
                 createSheep(zombies[i].location.x, zombies[i].location.y, this.velocity.mult(-1));
               }
+            }
+
+            if (this.caught && this.scale > 0.1) {
+              this.scale -= 0.1;
             }
           }
         });
@@ -203,7 +237,7 @@
                 }
                 //BitShadowMachine.System.remove(wolves[i]);
 
-                wolves[i].scale = 2;
+                wolves[i].scale = 3;
                 wolves[i].life = 0;
                 wolves[i].lifespan = caughtDuration;
                 wolves[i].caught = true;
@@ -214,6 +248,10 @@
                   Comment createSheep to create unbalanced system.
                 */
               }
+            }
+
+            if (this.caught && this.scale > 0.1) {
+              this.scale -= 0.1;
             }
           }
         });
