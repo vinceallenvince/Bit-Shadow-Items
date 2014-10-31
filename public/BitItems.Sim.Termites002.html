@@ -12,8 +12,8 @@
     <div id='worldA'></div>
     <script type="text/javascript" charset="utf-8">
 
-      var totalFood = 200;
-      var totalTermites = 1;
+      var totalFood = 1000;
+      var totalTermites = 50;
       var totalTermiteMemory = 6;
 
       var paletteTermite = new ColorPalette();
@@ -99,7 +99,7 @@
             BitShadowMachine.System.add('Sensor', {
               type: 'Food',
               targetClass: 'Food',
-              sensitivity: 50,
+              sensitivity: 20,
               offsetDistance: 10,
               behavior: 'AGGRESSIVE',
               minOpacity: 0.25,
@@ -155,9 +155,10 @@
                 }
 
                 // turn a random direction
-                this.velocity.normalize();
+                /*this.velocity.normalize();
                 this.velocity.rotate(BitShadowMachine.Utils.degreesToRadians(rand(0, 360)));
-                this.velocity.mult(this.motorSpeed);
+                this.velocity.mult(this.motorSpeed);*/
+                this.velocity.mult(-1);
 
                 //
                 break;
@@ -198,9 +199,9 @@
       BitShadowMachine.System.setup(function() {
 
         var world = this.add('World', {
-          width: 960,
-          height: 540,
-          resolution: 2,
+          width: 320,
+          height: 320,
+          resolution: 1,
           el: document.getElementById('worldA'),
           color: [0, 0, 0],
           gravity: new BitShadowMachine.Vector(0, 0),

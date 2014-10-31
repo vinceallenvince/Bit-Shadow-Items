@@ -109,21 +109,35 @@ Sensor.prototype.step = function() {
 
     var list = System.getAllItemsByAttribute('type', this.type, this.targetClass || 'Stimulus');
 
+    // we want to target the closest target
+    var possibleTargets = [];
+
     for (var i = 0, max = list.length; i < max; i++) {
-
       if (this._sensorActive(list[i], this.sensitivity) && !list[i].parent) {
-
-        this.target = list[i]; // target this stimulator
-        if (!this.activationLocation.x && !this.activationLocation.y) {
-          this.activationLocation.x = this.parent.location.x;
-          this.activationLocation.y = this.parent.location.y;
-        }
-        this.activated = true; // set activation
-        this.activatedColor = this.target.color;
-
-        check = true;
-        break;
+        possibleTargets.push(list[i]);
       }
+    }
+
+    if (possibleTargets.length > 0) {
+      // loop thru
+      for (var j = 0, maxj = possibleTargets.length; j < maxj; j++) {
+        // add a property that is the distance to this agent
+        possibleTargets[j].distToSensor = Vector.VectorDistance(possibleTargets[j].location, this.location);
+      }
+
+      // sort list
+      possibleTargets.sort(function(a,b){return (a.distToSensor - b.distToSensor);});
+
+      // take first in list
+      this.target = possibleTargets[0]; // target this stimulator
+      if (!this.activationLocation.x && !this.activationLocation.y) {
+        this.activationLocation.x = this.parent.location.x;
+        this.activationLocation.y = this.parent.location.y;
+      }
+      this.activated = true; // set activation
+      this.activatedColor = this.target.color;
+
+      check = true;
     }
   }
 
