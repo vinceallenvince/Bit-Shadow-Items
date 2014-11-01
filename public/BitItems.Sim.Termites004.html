@@ -12,11 +12,11 @@
     <div id='worldA'></div>
     <script type="text/javascript" charset="utf-8">
 
-      var totalFood = 1200;
-      var totalTermites = 10;
+      var totalFood = 3200;
+      var totalTermites = 25;
       var totalTermiteMemory = 2;
       var worldWidth = 480;
-      var worldHeight = 480;
+      var worldHeight =270;
       var initialFoodSeparation = 4;
 
       var paletteTermite = new ColorPalette();
@@ -169,12 +169,12 @@
               fd.name = 'Food';
             }
 
-            if (rand(1, 10) === 1 && !this.sensors[0].activated) {
+            /*if (rand(1, 10) === 1 && !this.sensors[0].activated) {
               var dir = rand(1, 2) == 1 ? 1 : -1;
               this.velocity.normalize();
               this.velocity.rotate(BitShadowMachine.Utils.degreesToRadians(rand(3, 20) * dir));
               this.velocity.mult(this.motorSpeed);
-            }
+            }*/
           }
         });
         termite.type = 'Termite';
@@ -208,7 +208,7 @@
         var world = this.add('World', {
           width: worldWidth,
           height: worldHeight,
-          resolution: 2,
+          resolution: 1,
           el: document.getElementById('worldA'),
           color: [0, 0, 0],
           gravity: new BitShadowMachine.Vector(0, 0),
