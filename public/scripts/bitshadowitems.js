@@ -1,4 +1,4 @@
-!function(e){if("object"==typeof exports&&"undefined"!=typeof module)module.exports=e();else if("function"==typeof define&&define.amd)define([],e);else{var f;"undefined"!=typeof window?f=window:"undefined"!=typeof global?f=global:"undefined"!=typeof self&&(f=self),f.BitShadowItems=e()}}(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+!function(e){if("object"==typeof exports)module.exports=e();else if("function"==typeof define&&define.amd)define(e);else{var f;"undefined"!=typeof window?f=window:"undefined"!=typeof global?f=global:"undefined"!=typeof self&&(f=self),f.BitShadowItems=e()}}(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module '"+o+"'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function(e){var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(_dereq_,module,exports){
 /*global document, window */
 
 /**
@@ -189,11 +189,11 @@ FPSDisplay.show = function() {
 
 module.exports = FPSDisplay;
 
-},{}],2:[function(require,module,exports){
-var Item = require('./item');
-var System = require('./system');
-var Utils = require('burner').Utils;
-var Vector = require('burner').Vector;
+},{}],2:[function(_dereq_,module,exports){
+var Item = _dereq_('./item');
+var System = _dereq_('./system');
+var Utils = _dereq_('burner').Utils;
+var Vector = _dereq_('burner').Vector;
 
 /**
  * Creates a new Anim. Use for frame-based animation in a
@@ -317,10 +317,10 @@ Anim.prototype.advanceFrame = function() {
 module.exports = Anim;
 
 
-},{"./item":4,"./system":6,"burner":14}],3:[function(require,module,exports){
-var Item = require('./item');
-var System = require('./system');
-var Utils = require('burner').Utils;
+},{"./item":4,"./system":6,"burner":14}],3:[function(_dereq_,module,exports){
+var Item = _dereq_('./item');
+var System = _dereq_('./system');
+var Utils = _dereq_('burner').Utils;
 
 /**
  * Creates a new AnimUnit.
@@ -366,9 +366,9 @@ AnimUnit.prototype.step = function() {
 };
 
 module.exports = AnimUnit;
-},{"./item":4,"./system":6,"burner":14}],4:[function(require,module,exports){
+},{"./item":4,"./system":6,"burner":14}],4:[function(_dereq_,module,exports){
 /*global document */
-var Vector = require('burner').Vector;
+var Vector = _dereq_('burner').Vector;
 
 /**
  * Creates a new Item.
@@ -547,25 +547,25 @@ Item.prototype.applyForce = function(force) {
 Item.prototype._checkWorldEdges = function() {
 
   if (this.location.y < 0) { // top
-    this.velocity.mult(-this.bounciness);
+    this.velocity.y *= -this.bounciness;
     this.location.y = 0;
     return;
   }
 
   if (this.location.x > this.world.width) { // right
-    this.velocity.mult(-this.bounciness);
+    this.velocity.x *= -this.bounciness;
     this.location.x = this.world.width;
     return;
   }
 
   if (this.location.y > this.world.height) { // bottom
-    this.velocity.mult(-this.bounciness);
+    this.velocity.y *= -this.bounciness;
     this.location.y = this.world.height;
     return;
   }
 
   if (this.location.x < 0) { // left
-    this.velocity.mult(-this.bounciness);
+    this.velocity.x *= -this.bounciness;
     this.location.x = 0;
     return;
   }
@@ -602,31 +602,31 @@ Item.prototype._wrapWorldEdges = function() {
 
 module.exports = Item;
 
-},{"burner":14}],5:[function(require,module,exports){
+},{"burner":14}],5:[function(_dereq_,module,exports){
 var BitShadowMachine = {
-  Anim: require('./anim'),
-  Item: require('./item'),
-  SimplexNoise: require('quietriot'),
-  System: require('./system'),
-  Vector: require('burner').Vector,
-  Utils: require('burner').Utils
+  Anim: _dereq_('./anim'),
+  Item: _dereq_('./item'),
+  SimplexNoise: _dereq_('quietriot'),
+  System: _dereq_('./system'),
+  Vector: _dereq_('burner').Vector,
+  Utils: _dereq_('burner').Utils
 };
 
 BitShadowMachine.System.Classes = {
-  Anim: require('./anim'),
-  AnimUnit: require('./animunit')
+  Anim: _dereq_('./anim'),
+  AnimUnit: _dereq_('./animunit')
 };
 
 module.exports = BitShadowMachine;
-},{"./anim":2,"./animunit":3,"./item":4,"./system":6,"burner":14,"quietriot":19}],6:[function(require,module,exports){
+},{"./anim":2,"./animunit":3,"./item":4,"./system":6,"burner":14,"quietriot":19}],6:[function(_dereq_,module,exports){
 /*global window, document */
 /*jshint supernew:true */
 
-var Item = require('./item');
-var FPSDisplay = require('fpsdisplay');
-var Utils = require('burner').Utils;
-var Vector = require('burner').Vector;
-var World = require('./world');
+var Item = _dereq_('./item');
+var FPSDisplay = _dereq_('fpsdisplay');
+var Utils = _dereq_('burner').Utils;
+var Vector = _dereq_('burner').Vector;
+var World = _dereq_('./world');
 
 window.requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame ||
                               window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
@@ -1349,10 +1349,10 @@ System._resetSystem = function() {
 
 module.exports = System;
 
-},{"./item":4,"./world":7,"burner":14,"fpsdisplay":1}],7:[function(require,module,exports){
-var Item = require('./item');
-var Utils = require('burner').Utils;
-var Vector = require('burner').Vector;
+},{"./item":4,"./world":7,"burner":14,"fpsdisplay":1}],7:[function(_dereq_,module,exports){
+var Item = _dereq_('./item');
+var Utils = _dereq_('burner').Utils;
+var Vector = _dereq_('burner').Vector;
 
 /**
  * Creates a new World.
@@ -1437,7 +1437,7 @@ World.prototype.step = function() {};
 
 module.exports = World;
 
-},{"./item":4,"burner":14}],8:[function(require,module,exports){
+},{"./item":4,"burner":14}],8:[function(_dereq_,module,exports){
 /*jshint supernew:true */
 /** @namespace */
 var Utils = {
@@ -1637,8 +1637,8 @@ Utils.capitalizeFirstLetter = function(string) {
 };
 
 module.exports = Utils;
-},{}],9:[function(require,module,exports){
-var Utils = require('drawing-utils-lib');
+},{}],9:[function(_dereq_,module,exports){
+var Utils = _dereq_('drawing-utils-lib');
 
 /**
  * Creates a new BorderPalette object.
@@ -1708,11 +1708,11 @@ BorderPalette.prototype.getBorder = function() {
 module.exports = BorderPalette;
 
 
-},{"drawing-utils-lib":8}],10:[function(require,module,exports){
-module.exports=require(8)
-},{"/Users/vince/Dev/Foldi/Bit-Shadow-Items/node_modules/borderpalette/node_modules/drawing-utils-lib/src/drawing-utils-lib.js":8}],11:[function(require,module,exports){
-module.exports=require(1)
-},{"/Users/vince/Dev/Foldi/Bit-Shadow-Items/node_modules/bitshadowmachine/node_modules/fpsdisplay/src/fpsdisplay.js":1}],12:[function(require,module,exports){
+},{"drawing-utils-lib":8}],10:[function(_dereq_,module,exports){
+module.exports=_dereq_(8)
+},{}],11:[function(_dereq_,module,exports){
+module.exports=_dereq_(1)
+},{}],12:[function(_dereq_,module,exports){
 /*global exports, Vector */
 /*jshint supernew:true */
 
@@ -1967,10 +1967,10 @@ Vector.prototype.dot = function(vector) {
 };
 
 module.exports = Vector;
-},{}],13:[function(require,module,exports){
+},{}],13:[function(_dereq_,module,exports){
 /*global document */
 
-var Vector = require('vector2d-lib');
+var Vector = _dereq_('vector2d-lib');
 
 /**
  * Creates a new Item.
@@ -1999,22 +1999,6 @@ Item._stylePosition =
     '-moz-transform: translate3d(<x>px, <y>px, 0) rotate(<angle>deg) scale(<scale>, <scale>); ' +
     '-o-transform: translate3d(<x>px, <y>px, 0) rotate(<angle>deg) scale(<scale>, <scale>); ' +
     '-ms-transform: translate3d(<x>px, <y>px, 0) rotate(<angle>deg) scale(<scale>, <scale>);';
-
-/**
- * The base DOM element to use as the Item view.
- * @type {string}
- * @memberof Item
- * @private
- */
-Item.baseElement = 'div';
-
-/**
- * The base DOM element attributes.
- * @type {Object}
- * @memberof Item
- * @private
- */
-Item.baseElementAttributes = {};
 
 /**
  * Resets all properties.
@@ -2168,12 +2152,7 @@ Item.prototype.init = function(world, opt_options) {
 
   this.id = this.name + Item._idCount;
   if (!this.el) {
-    this.el = document.createElement(Item.baseElement);
-    for (var i in Item.baseElementAttributes) {
-      if (Item.baseElementAttributes.hasOwnProperty(i)) {
-        this.el[i] = Item.baseElementAttributes[i];
-      }
-    }
+    this.el = document.createElement('div');
     this.el.id = this.id;
     this.el.className = 'item ' + this.name.toLowerCase();
     this.el.style.position = 'absolute';
@@ -2334,24 +2313,24 @@ Item.prototype.getCSSText = function(props) {
 
 module.exports = Item;
 
-},{"vector2d-lib":12}],14:[function(require,module,exports){
+},{"vector2d-lib":12}],14:[function(_dereq_,module,exports){
 module.exports = {
-  Item: require('./item'),
-  System: require('./system'),
-  Utils: require('drawing-utils-lib'),
-  Vector: require('vector2d-lib'),
-  World: require('./world')
+  Item: _dereq_('./item'),
+  System: _dereq_('./system'),
+  Utils: _dereq_('drawing-utils-lib'),
+  Vector: _dereq_('vector2d-lib'),
+  World: _dereq_('./world')
 };
 
-},{"./item":13,"./system":15,"./world":16,"drawing-utils-lib":10,"vector2d-lib":12}],15:[function(require,module,exports){
+},{"./item":13,"./system":15,"./world":16,"drawing-utils-lib":10,"vector2d-lib":12}],15:[function(_dereq_,module,exports){
 /*global window, document */
 /*jshint supernew:true */
 
-var Item = require('./item'),
-    World = require('./world'),
-    Vector = require('vector2d-lib'),
-    Utils = require('drawing-utils-lib'),
-    FPSDisplay = require('fpsdisplay');
+var Item = _dereq_('./item'),
+    World = _dereq_('./world'),
+    Vector = _dereq_('vector2d-lib'),
+    Utils = _dereq_('drawing-utils-lib'),
+    FPSDisplay = _dereq_('fpsdisplay');
 
 window.requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame ||
                               window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
@@ -2841,10 +2820,10 @@ System._toggleFPS = function() {
 
 module.exports = System;
 
-},{"./item":13,"./world":16,"drawing-utils-lib":10,"fpsdisplay":11,"vector2d-lib":12}],16:[function(require,module,exports){
-var Vector = require('vector2d-lib'),
-    Item = require('./item'),
-    Utils = require('drawing-utils-lib');
+},{"./item":13,"./world":16,"drawing-utils-lib":10,"fpsdisplay":11,"vector2d-lib":12}],16:[function(_dereq_,module,exports){
+var Vector = _dereq_('vector2d-lib'),
+    Item = _dereq_('./item'),
+    Utils = _dereq_('drawing-utils-lib');
 
 /**
  * Creates a new World.
@@ -2957,10 +2936,10 @@ World.prototype.getCSSText = function(props) {
 
 module.exports = World;
 
-},{"./item":13,"drawing-utils-lib":10,"vector2d-lib":12}],17:[function(require,module,exports){
-module.exports=require(8)
-},{"/Users/vince/Dev/Foldi/Bit-Shadow-Items/node_modules/borderpalette/node_modules/drawing-utils-lib/src/drawing-utils-lib.js":8}],18:[function(require,module,exports){
-var Utils = require('drawing-utils-lib');
+},{"./item":13,"drawing-utils-lib":10,"vector2d-lib":12}],17:[function(_dereq_,module,exports){
+module.exports=_dereq_(8)
+},{}],18:[function(_dereq_,module,exports){
+var Utils = _dereq_('drawing-utils-lib');
 /**
  * Creates a new ColorPalette object.
  *
@@ -3123,7 +3102,7 @@ ColorPalette.prototype.getColor = function() {
 
 module.exports = ColorPalette;
 
-},{"drawing-utils-lib":17}],19:[function(require,module,exports){
+},{"drawing-utils-lib":17}],19:[function(_dereq_,module,exports){
 /*jshint bitwise:false */
 /**
 * https://gist.github.com/304522
@@ -3254,12 +3233,12 @@ SimplexNoise.dot = function(g, x, y) {
 
 module.exports = SimplexNoise;
 
-},{}],20:[function(require,module,exports){
-var Item = require('bitshadowmachine').Item,
-		Mover = require('./mover'),
-    System = require('bitshadowmachine').System,
-    Utils = require('bitshadowmachine').Utils,
-    Vector = require('bitshadowmachine').Vector;
+},{}],20:[function(_dereq_,module,exports){
+var Item = _dereq_('bitshadowmachine').Item,
+		Mover = _dereq_('./mover'),
+    System = _dereq_('bitshadowmachine').System,
+    Utils = _dereq_('bitshadowmachine').Utils,
+    Vector = _dereq_('bitshadowmachine').Vector;
 
 /**
  * Creates a new Agent.
@@ -3621,7 +3600,7 @@ Agent.prototype._cohesion = function(items) {
 
 
 module.exports = Agent;
-},{"./mover":24,"bitshadowmachine":5}],21:[function(require,module,exports){
+},{"./mover":24,"bitshadowmachine":5}],21:[function(_dereq_,module,exports){
 /**
  * @namespace
  */
@@ -3683,10 +3662,10 @@ var config = {
 
 module.exports.config = config;
 
-},{}],22:[function(require,module,exports){
-var Item = require('bitshadowmachine').Item,
-    Utils = require('bitshadowmachine').Utils,
-    Vector = require('bitshadowmachine').Vector;
+},{}],22:[function(_dereq_,module,exports){
+var Item = _dereq_('bitshadowmachine').Item,
+    Utils = _dereq_('bitshadowmachine').Utils,
+    Vector = _dereq_('bitshadowmachine').Vector;
 
 /**
  * Creates a new Food.
@@ -3743,21 +3722,21 @@ Food.prototype.step = function() {
 };
 
 module.exports = Food;
-},{"bitshadowmachine":5}],23:[function(require,module,exports){
-var Utils = require('bitshadowmachine').Utils;
+},{"bitshadowmachine":5}],23:[function(_dereq_,module,exports){
+var Utils = _dereq_('bitshadowmachine').Utils;
 
 var BitShadowItems = {
-  Agent: require('./agent'),
-  Food: require('./food'),
-  Mover: require('./mover'),
-  Oscillator: require('./oscillator'),
-  Particle: require('./particle'),
-  Point: require('./point'),
-  Sensor: require('./sensor'),
-  Stimulus: require('./stimulus'),
-  Walker: require('./walker'),
+  Agent: _dereq_('./agent'),
+  Food: _dereq_('./food'),
+  Mover: _dereq_('./mover'),
+  Oscillator: _dereq_('./oscillator'),
+  Particle: _dereq_('./particle'),
+  Point: _dereq_('./point'),
+  Sensor: _dereq_('./sensor'),
+  Stimulus: _dereq_('./stimulus'),
+  Walker: _dereq_('./walker'),
   configure: function(System) {
-  	var sys = require('bitshadowmachine').System;
+  	var sys = _dereq_('bitshadowmachine').System;
 
   	for (i in System) {
   		if (System.hasOwnProperty(i)) {
@@ -3780,11 +3759,11 @@ var BitShadowItems = {
 
 module.exports = BitShadowItems;
 
-},{"./agent":20,"./food":22,"./mover":24,"./oscillator":25,"./particle":26,"./point":27,"./sensor":28,"./stimulus":29,"./walker":30,"bitshadowmachine":5}],24:[function(require,module,exports){
-var Item = require('bitshadowmachine').Item,
-    System = require('bitshadowmachine').System,
-    Utils = require('bitshadowmachine').Utils,
-    Vector = require('bitshadowmachine').Vector;
+},{"./agent":20,"./food":22,"./mover":24,"./oscillator":25,"./particle":26,"./point":27,"./sensor":28,"./stimulus":29,"./walker":30,"bitshadowmachine":5}],24:[function(_dereq_,module,exports){
+var Item = _dereq_('bitshadowmachine').Item,
+    System = _dereq_('bitshadowmachine').System,
+    Utils = _dereq_('bitshadowmachine').Utils,
+    Vector = _dereq_('bitshadowmachine').Vector;
 
 /**
  * Creates a new Mover.
@@ -3950,12 +3929,12 @@ Mover.prototype.step = function() {
 
 module.exports = Mover;
 
-},{"bitshadowmachine":5}],25:[function(require,module,exports){
-var Item = require('bitshadowmachine').Item,
-    SimplexNoise = require('quietriot'),
-    System = require('bitshadowmachine').System,
-    Utils = require('bitshadowmachine').Utils,
-    Vector = require('bitshadowmachine').Vector;
+},{"bitshadowmachine":5}],25:[function(_dereq_,module,exports){
+var Item = _dereq_('bitshadowmachine').Item,
+    SimplexNoise = _dereq_('quietriot'),
+    System = _dereq_('bitshadowmachine').System,
+    Utils = _dereq_('bitshadowmachine').Utils,
+    Vector = _dereq_('bitshadowmachine').Vector;
 
 function Oscillator(opt_options) {
   Item.call(this);
@@ -4037,11 +4016,11 @@ Oscillator.prototype.step = function () {
 
 module.exports = Oscillator;
 
-},{"bitshadowmachine":5,"quietriot":19}],26:[function(require,module,exports){
-var Item = require('bitshadowmachine').Item,
-    Mover = require('./mover'),
-    Utils = require('bitshadowmachine').Utils,
-    Vector = require('bitshadowmachine').Vector;
+},{"bitshadowmachine":5,"quietriot":19}],26:[function(_dereq_,module,exports){
+var Item = _dereq_('bitshadowmachine').Item,
+    Mover = _dereq_('./mover'),
+    Utils = _dereq_('bitshadowmachine').Utils,
+    Vector = _dereq_('bitshadowmachine').Vector;
 
 /**
  * Creates a new Particle object.
@@ -4107,9 +4086,9 @@ Particle.prototype.afterStep = function() {
 
 module.exports = Particle;
 
-},{"./mover":24,"bitshadowmachine":5}],27:[function(require,module,exports){
-var Item = require('bitshadowmachine').Item,
-    Utils = require('bitshadowmachine').Utils;
+},{"./mover":24,"bitshadowmachine":5}],27:[function(_dereq_,module,exports){
+var Item = _dereq_('bitshadowmachine').Item,
+    Utils = _dereq_('bitshadowmachine').Utils;
 
 /**
  * Creates a new Point.
@@ -4151,11 +4130,11 @@ Point.prototype.step = function() {
 };
 
 module.exports = Point;
-},{"bitshadowmachine":5}],28:[function(require,module,exports){
-var Mover = require('./mover'),
-    System = require('bitshadowmachine').System,
-    Utils = require('bitshadowmachine').Utils,
-    Vector = require('bitshadowmachine').Vector;
+},{"bitshadowmachine":5}],28:[function(_dereq_,module,exports){
+var Mover = _dereq_('./mover'),
+    System = _dereq_('bitshadowmachine').System,
+    Utils = _dereq_('bitshadowmachine').Utils,
+    Vector = _dereq_('bitshadowmachine').Vector;
 
 /**
  * Creates a new Sensor object.
@@ -4262,7 +4241,10 @@ Sensor.prototype.step = function() {
   if (this.delay <= this.clock) {
 
     var list = System.getAllItemsByAttribute('type', this.type, this.targetClass || 'Stimulus');
+
+    // we want to target the closest target
     var possibleTargets = [];
+
     for (var i = 0, max = list.length; i < max; i++) {
       if (this._sensorActive(list[i], this.sensitivity) && !list[i].parent) {
         possibleTargets.push(list[i]);
@@ -4634,12 +4616,12 @@ Sensor.prototype._sensorActive = function(target) {
 
 module.exports = Sensor;
 
-},{"./mover":24,"bitshadowmachine":5}],29:[function(require,module,exports){
-var BorderPalette = require('borderpalette'),
-    ColorPalette = require('colorpalette'),
-    config = require('./config').config,
-    Mover = require('./mover'),
-    Utils = require('bitshadowmachine').Utils;
+},{"./mover":24,"bitshadowmachine":5}],29:[function(_dereq_,module,exports){
+var BorderPalette = _dereq_('borderpalette'),
+    ColorPalette = _dereq_('colorpalette'),
+    config = _dereq_('./config').config,
+    Mover = _dereq_('./mover'),
+    Utils = _dereq_('bitshadowmachine').Utils;
 
 /**
  * Creates a new Stimulus.
@@ -4754,11 +4736,11 @@ Stimulus.prototype.init = function(world, opt_options) {
 
 module.exports = Stimulus;
 
-},{"./config":21,"./mover":24,"bitshadowmachine":5,"borderpalette":9,"colorpalette":18}],30:[function(require,module,exports){
-var Mover = require('./mover'),
-    SimplexNoise = require('quietriot'),
-    Utils = require('bitshadowmachine').Utils,
-    Vector = require('bitshadowmachine').Vector;
+},{"./config":21,"./mover":24,"bitshadowmachine":5,"borderpalette":9,"colorpalette":18}],30:[function(_dereq_,module,exports){
+var Mover = _dereq_('./mover'),
+    SimplexNoise = _dereq_('quietriot'),
+    Utils = _dereq_('bitshadowmachine').Utils,
+    Vector = _dereq_('bitshadowmachine').Vector;
 
 /**
  * Creates a new Walker.
@@ -4859,5 +4841,6 @@ Walker.prototype.applyAdditionalForces = function() {
 
 module.exports = Walker;
 
-},{"./mover":24,"bitshadowmachine":5,"quietriot":19}]},{},[23])(23)
+},{"./mover":24,"bitshadowmachine":5,"quietriot":19}]},{},[23])
+(23)
 });

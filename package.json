@@ -33,7 +33,7 @@
     "testling": "^1.6.1"
   },
   "dependencies": {
-    "bitshadowmachine": "^3.0.2",
+    "bitshadowmachine": "^3.0.5",
     "borderpalette": "^0.1.7",
     "burner": "^3.1.5",
     "colorpalette": "^0.1.5",

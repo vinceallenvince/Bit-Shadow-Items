@@ -12,7 +12,7 @@
     <div id='worldA'></div>
     <script type="text/javascript" charset="utf-8">
 
-      var totalFood = 750;
+      var totalFood = 1200;
       var totalTermites = 10;
       var totalTermiteMemory = 2;
       var worldWidth = 480;
@@ -82,10 +82,6 @@
         return check;
       }
 
-      function getFreeLocation() {
-
-      }
-
       function createTermite(x, y, velocity) {
 
         var vel = velocity ? new BitShadowMachine.Vector(velocity.x, velocity.y) :
@@ -107,32 +103,13 @@
             BitShadowMachine.System.add('Sensor', {
               type: 'Food',
               targetClass: 'Food',
-              sensitivity: 0,
+              sensitivity: 10,
               offsetDistance: 10,
               behavior: 'AGGRESSIVE',
               minOpacity: 0.25,
               maxOpacity: 0.5
             })
           ],
-          afterStep: function() {
-            // am I stuck?
-            /*if (this.distanceInterval < this.distanceIntervalMax) {
-              this.distanceTraveled += BitShadowMachine.Vector.VectorDistance(this.location,
-                this.lastLocation);
-            } else {
-
-              if (this.distanceTraveled < 500 && BitShadowMachine.clock > 100) {
-                this.location.x = 0;
-                this.location.y = 0;
-                console.log("I'm stuck!");
-              }
-              this.distanceInterval = 0;
-              this.distanceTraveled = 0;
-            }*/
-
-            this.lastLocation.x = this.location.x;
-            this.lastLocation.y = this.location.y;
-          },
           beforeStep: function() {
 
             var food = BitShadowMachine.System.getAllItemsByAttribute('type', 'Food', 'Food');
@@ -158,36 +135,12 @@
 
                   var newLoc = new BitShadowMachine.Vector(this.velocity.x, this.velocity.y);
                   newLoc.normalize();
-                  //newLoc.rotate(90);
                   newLoc.mult(-fpo);
                   this.foundFood.location.x = food[i].location.x + newLoc.x;
                   this.foundFood.location.y = food[i].location.y + newLoc.y;
 
                   this.location.x = this.location.x + newLoc.x;
                   this.location.y = this.location.y + newLoc.y;
-
-                  // find closest edge
-                  /*if (this.location.x >= food[i].location.x + food[i].scale / 2) {
-                    this.foundFood.location.x = food[i].location.x + food[i].scale * fpo;
-                    this.location.x = this.foundFood.location.x + this.foundFood.scale * fpo;
-                  } else if (this.location.x < food[i].location.x - food[i].scale / 2) {
-                    this.foundFood.location.x = food[i].location.x - food[i].scale * fpo;
-                    this.location.x = this.foundFood.location.x - this.foundFood.scale * fpo;
-                  } else {
-                    this.foundFood.location.x = food[i].location.x;
-                    this.location.x = this.foundFood.location.x;
-                  }
-
-                  if (this.location.y >= food[i].location.y + food[i].scale / 2) {
-                    this.foundFood.location.y = food[i].location.y + food[i].scale * fpo;
-                    this.location.y = this.foundFood.location.y + this.foundFood.scale * fpo;
-                  } else if (this.location.y < food[i].location.y - food[i].scale / 2) {
-                    this.foundFood.location.y = food[i].location.y - food[i].scale * fpo;
-                    this.location.y = this.foundFood.location.y - this.foundFood.scale * fpo;
-                  } else {
-                    this.foundFood.location.y = food[i].location.y;
-                    this.location.y = this.foundFood.location.y;
-                  }*/
 
                   this.foundFood = null;
 
@@ -222,13 +175,6 @@
               this.velocity.rotate(BitShadowMachine.Utils.degreesToRadians(rand(3, 20) * dir));
               this.velocity.mult(this.motorSpeed);
             }
-
-            /*if (this.lastLocation.x < 0 && this.lastLocation.y < 0) {
-              this.lastLocation.x = this.location.x;
-              this.lastLocation.y = this.location.y;
-            }
-            termite.distanceInterval++;*/
-
           }
         });
         termite.type = 'Termite';
