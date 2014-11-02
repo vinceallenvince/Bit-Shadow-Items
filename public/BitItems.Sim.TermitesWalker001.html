@@ -18,7 +18,7 @@
       var worldWidth = 960;
       var worldHeight = 540;
       var worldResolution = 2;
-      var initialFoodSeparation = 6;
+      var initialFoodSeparation = 3;
 
       var paletteTermite = new ColorPalette();
       paletteTermite.addColor({
@@ -115,7 +115,8 @@
 
                   this.foundFood.carried = false;
                   this.foundFood.parent = null;
-                  this.foundFood.scale = 3;
+                  this.foundFood.scale = 3.5;
+                  this.foundFood.opacity = 0.25;
 
                   var fpo = 4; // food placement offset
 
@@ -141,7 +142,7 @@
                 }
 
                 // turn the opposite direction
-                this.velocity.mult(-this.maxSpeed);
+                this.velocity.mult(-this.maxSpeed * 0.5);
 
                 break;
               }
@@ -153,7 +154,6 @@
               fd = this.lastBumpedFood.shift();
               fd.name = 'Food';
             }
-
           }
         });
 
@@ -161,108 +161,6 @@
         termite.foundFood = null;
         termite.lastBumpedFood = [];
       }
-
-      /*function createTermite(x, y, velocity) {
-
-        var vel = velocity ? new BitShadowMachine.Vector(velocity.x, velocity.y) :
-            new BitShadowMachine.Vector(rand(0, -2, true), rand(-2, 2, true))
-
-        var termite = BitShadowMachine.System.add('Agent', {
-          type: 'Termite',
-          color: [0, 255, 0],
-          opacity: 1,
-          maxSpeed: 1,
-          wrapWorldEdges: true,
-          checkWorldEdges: false,
-          motorSpeed: 1,
-          location: new BitShadowMachine.Vector(x, y),
-          velocity: vel,
-          maxSteeringForce: 5,
-          flocking: false,
-          sensors: [
-            BitShadowMachine.System.add('Sensor', {
-              type: 'Food',
-              targetClass: 'Food',
-              sensitivity: 10,
-              offsetDistance: 10,
-              behavior: 'AGGRESSIVE',
-              minOpacity: 0.25,
-              maxOpacity: 0.5
-            })
-          ],
-          beforeStep: function() {
-
-            var food = BitShadowMachine.System.getAllItemsByAttribute('type', 'Food', 'Food');
-
-            for (var i = food.length - 1; i >= 0; i--) {
-
-              if (isInside(this, food[i])
-                && !checkInArray(this.lastBumpedFood, food[i])
-                ) {
-
-                food[i].name = 'Bumped';
-                this.lastBumpedFood.push(food[i]);
-
-                if (this.foundFood) { // if carrying food, drop it
-
-                  this.foundFood.carried = false;
-                  this.foundFood.parent = null;
-
-                  var fpo = 4; // food placement offset
-
-                  var angle = Math.atan2(this.velocity.y,
-                      this.velocity.x);
-
-                  var newLoc = new BitShadowMachine.Vector(this.velocity.x, this.velocity.y);
-                  newLoc.normalize();
-                  newLoc.mult(-fpo);
-                  this.foundFood.location.x = food[i].location.x + newLoc.x;
-                  this.foundFood.location.y = food[i].location.y + newLoc.y;
-
-                  this.location.x = this.location.x + newLoc.x;
-                  this.location.y = this.location.y + newLoc.y;
-
-                  this.foundFood = null;
-
-                } else {
-                  // pick up new food
-                  food[i].carried = true;
-                  food[i].parent = this;
-                  this.foundFood = food[i];
-                }
-
-                // turn a random direction
-                this.velocity.mult(-1);
-
-                //
-                break;
-              }
-
-            }
-
-            // wait to enable last touched food until termite has found other foods
-            if (this.lastBumpedFood.length > totalTermiteMemory) {
-              fd = this.lastBumpedFood.shift();
-              fd.name = 'Food';
-            }
-
-            if (rand(1, 10) === 1 && !this.sensors[0].activated) {
-              var dir = rand(1, 2) == 1 ? 1 : -1;
-              this.velocity.normalize();
-              this.velocity.rotate(BitShadowMachine.Utils.degreesToRadians(rand(3, 20) * dir));
-              this.velocity.mult(this.motorSpeed);
-            }
-          }
-        });
-        termite.type = 'Termite';
-        termite.foundFood = null;
-        termite.lastLocation = new BitShadowMachine.Vector(-1, -1);
-        termite.distanceTraveled = 0;
-        termite.distanceIntervalMax = 100;
-        termite.lastBumpedFood = [];
-
-        return termite;
-      }*/
 
       function createFood(x, y, index) {
 
@@ -276,6 +174,9 @@
           beforeStep: function() {
             if (this.scale > 2) {
               this.scale -= 0.1;
+            }
+            if (this.opacity < 1) {
+              this.opacity += 0.1;
             }
           }
         });

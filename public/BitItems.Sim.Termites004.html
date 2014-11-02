@@ -104,7 +104,7 @@
             BitShadowMachine.System.add('Sensor', {
               type: 'Food',
               targetClass: 'Food',
-              sensitivity: 10,
+              sensitivity: 100,
               offsetDistance: 10,
               behavior: 'AGGRESSIVE',
               minOpacity: 0.25,
@@ -128,6 +128,8 @@
 
                   this.foundFood.carried = false;
                   this.foundFood.parent = null;
+                  this.foundFood.scale = 3.5;
+                  this.foundFood.opacity = 0.25;
 
                   var fpo = 4; // food placement offset
 
@@ -196,7 +198,15 @@
           offsetDistance: -2,
           color: paletteFood.getColor(),
           isStatic: false,
-          location: new BitShadowMachine.Vector(x, y)
+          location: new BitShadowMachine.Vector(x, y),
+          beforeStep: function() {
+            if (this.scale > 2) {
+              this.scale -= 0.2;
+            }
+            if (this.opacity < 1) {
+              this.opacity += 0.1;
+            }
+          }
         });
         food.type = 'Food';
         food.index = index;
