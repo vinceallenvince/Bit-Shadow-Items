@@ -31,11 +31,14 @@ Food.prototype.init = function(world, opt_options) {
   this.color = options.color || [200, 200, 200];
   this.offsetDistance = typeof options.offsetDistance === 'undefined' ? -10 : options.offsetDistance;
   this.offsetAngle = options.offsetAngle || 0;
+  this.beforeStep = options.beforeStep || function() {};
 
-  this.offsetVector = new Vector();
+	this.offsetVector = new Vector();
 };
 
 Food.prototype.step = function() {
+
+	this.beforeStep.call(this);
 
 	if (this.parent) {
 		if (this.offsetDistance) {

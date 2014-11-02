@@ -67,7 +67,7 @@
       BitShadowItems.configure(BitShadowMachine.System);
 
       BitShadowMachine.System.Classes = {
-        Agent: BitShadowItems.Agent,
+        Walker: BitShadowItems.Walker,
         Food: BitShadowItems.Food,
         Sensor: BitShadowItems.Sensor
       };
@@ -84,6 +84,85 @@
       }
 
       function createTermite(x, y, velocity) {
+
+        var vel = velocity ? new BitShadowMachine.Vector(velocity.x, velocity.y) :
+            new BitShadowMachine.Vector(rand(0, -2, true), rand(-2, 2, true))
+
+        var termite = BitShadowMachine.System.add('Walker', {
+          location: new BitShadowMachine.Vector(x, y),
+          type: 'Termite',
+          color: [0, 255, 0],
+          opacity: 1,
+          maxSpeed: 1,
+          wrapWorldEdges: true,
+          checkWorldEdges: false,
+          perlin: false,
+          maxSpeed: 1,
+          beforeStep: function() {
+
+            var food = BitShadowMachine.System.getAllItemsByAttribute('type', 'Food', 'Food');
+
+            for (var i = food.length - 1; i >= 0; i--) {
+
+              if (isInside(this, food[i])
+                && !checkInArray(this.lastBumpedFood, food[i])
+                ) {
+
+                food[i].name = 'Bumped';
+                this.lastBumpedFood.push(food[i]);
+
+                if (this.foundFood) { // if carrying food, drop it
+
+                  this.foundFood.carried = false;
+                  this.foundFood.parent = null;
+                  this.foundFood.scale = 3;
+
+                  var fpo = 4; // food placement offset
+
+                  var angle = Math.atan2(this.velocity.y,
+                      this.velocity.x);
+
+                  var newLoc = new BitShadowMachine.Vector(this.velocity.x, this.velocity.y);
+                  newLoc.normalize();
+                  newLoc.mult(-fpo);
+                  this.foundFood.location.x = food[i].location.x + newLoc.x;
+                  this.foundFood.location.y = food[i].location.y + newLoc.y;
+
+                  this.location.x = this.location.x + newLoc.x;
+                  this.location.y = this.location.y + newLoc.y;
+
+                  this.foundFood = null;
+
+                } else {
+                  // pick up new food
+                  food[i].carried = true;
+                  food[i].parent = this;
+                  this.foundFood = food[i];
+                }
+
+                // turn the opposite direction
+                this.velocity.mult(-this.maxSpeed);
+
+                break;
+              }
+
+            }
+
+            // wait to enable last touched food until termite has found other foods
+            if (this.lastBumpedFood.length > totalTermiteMemory) {
+              fd = this.lastBumpedFood.shift();
+              fd.name = 'Food';
+            }
+
+          }
+        });
+
+        termite.type = 'Termite';
+        termite.foundFood = null;
+        termite.lastBumpedFood = [];
+      }
+
+      /*function createTermite(x, y, velocity) {
 
         var vel = velocity ? new BitShadowMachine.Vector(velocity.x, velocity.y) :
             new BitShadowMachine.Vector(rand(0, -2, true), rand(-2, 2, true))
@@ -153,9 +232,6 @@
                 }
 
                 // turn a random direction
-                /*this.velocity.normalize();
-                this.velocity.rotate(BitShadowMachine.Utils.degreesToRadians(rand(0, 360)));
-                this.velocity.mult(this.motorSpeed);*/
                 this.velocity.mult(-1);
 
                 //
@@ -186,7 +262,7 @@
         termite.lastBumpedFood = [];
 
         return termite;
-      }
+      }*/
 
       function createFood(x, y, index) {
 
@@ -196,7 +272,12 @@
           offsetDistance: -2,
           color: paletteFood.getColor(),
           isStatic: false,
-          location: new BitShadowMachine.Vector(x, y)
+          location: new BitShadowMachine.Vector(x, y),
+          beforeStep: function() {
+            if (this.scale > 2) {
+              this.scale -= 0.1;
+            }
+          }
         });
         food.type = 'Food';
         food.index = index;
