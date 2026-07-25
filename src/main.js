@@ -13,7 +13,7 @@ var BitShadowItems = {
   configure: function(System) {
   	var sys = require('bitshadowmachine').System;
 
-  	for (i in System) {
+  	for (var i in System) {
   		if (System.hasOwnProperty(i)) {
   			sys[i] = System[i];
   		}
